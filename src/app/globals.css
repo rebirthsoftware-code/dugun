@@ -1,0 +1,199 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #0b0a0a;
+  --color-ink-2: #141212;
+  --color-ink-3: #1e1b1b;
+  --color-ivory: #f3ede3;
+  --color-ivory-2: #e4dccd;
+  --color-mute: #8d8578;
+  --color-gold: #d4b483;
+  --color-gold-2: #a98b5a;
+  --color-rose: #c98a8a;
+  --color-sage: #9db5a3;
+
+  --font-display: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  --font-sans: var(--font-manrope), "Manrope", system-ui, sans-serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+
+  --breakpoint-3xl: 1800px;
+}
+
+:root {
+  color-scheme: dark;
+  --header-h: 88px;
+}
+
+html {
+  scroll-behavior: auto;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+body {
+  background: var(--color-ink);
+  color: var(--color-ivory);
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--color-gold);
+  color: var(--color-ink);
+}
+
+/* Fine-pointer devices hide the native cursor; the custom cursor takes over. */
+@media (pointer: fine) {
+  html.custom-cursor,
+  html.custom-cursor * {
+    cursor: none !important;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Typography utilities                                                */
+/* ------------------------------------------------------------------ */
+@utility font-display {
+  font-family: var(--font-display);
+  font-weight: 300;
+  letter-spacing: -0.01em;
+}
+
+@utility type-xl {
+  font-size: clamp(3.25rem, 11vw, 11rem);
+  line-height: 0.92;
+}
+@utility type-lg {
+  font-size: clamp(2.75rem, 7.5vw, 7.5rem);
+  line-height: 0.95;
+}
+@utility type-md {
+  font-size: clamp(2.25rem, 5vw, 5rem);
+  line-height: 1;
+}
+@utility type-sm {
+  font-size: clamp(1.75rem, 3.2vw, 3rem);
+  line-height: 1.05;
+}
+
+@utility eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+
+@utility text-outline {
+  -webkit-text-stroke: 1px color-mix(in oklab, var(--color-ivory) 35%, transparent);
+  color: transparent;
+}
+
+@utility container-x {
+  padding-inline: clamp(1.25rem, 4vw, 4.5rem);
+}
+
+@utility hairline {
+  border-color: color-mix(in oklab, var(--color-ivory) 12%, transparent);
+}
+
+@utility grain {
+  position: relative;
+  &::after {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+    opacity: 0.6;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Motion primitives                                                    */
+/* ------------------------------------------------------------------ */
+@keyframes marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+}
+.animate-spin-slow {
+  animation: spin-slow 18s linear infinite;
+}
+
+.gold-shimmer {
+  background: linear-gradient(
+    110deg,
+    var(--color-gold-2) 0%,
+    var(--color-gold) 35%,
+    #f1e2c0 50%,
+    var(--color-gold) 65%,
+    var(--color-gold-2) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 6s linear infinite;
+}
+
+.line-mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+.word-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
+}
+
+/* Reduced motion: keep layout, cut the theatre. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* View transitions between routes */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.55s;
+  animation-timing-function: var(--ease-in-out-quart);
+}
