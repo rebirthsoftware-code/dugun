@@ -1,3 +1,5 @@
+export const dynamic = "force-static";
+
 import { ImageResponse } from "next/og";
 import { getVenue, venues } from "@/lib/data";
 import { OgCard } from "@/app/opengraph-image";

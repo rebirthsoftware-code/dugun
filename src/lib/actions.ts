@@ -1,5 +1,10 @@
-"use server";
-
+/**
+ * Talep ve uygunluk mantığı.
+ *
+ * Site GitHub Pages'te statik olarak yayınlandığı için bu fonksiyonlar tarayıcıda çalışır.
+ * Bir Node.js ortamına (Vercel vb.) taşındığında dosyanın başına "use server" eklenerek
+ * aynı imzayla Server Action'a dönüştürülebilir; bileşen tarafında değişiklik gerekmez.
+ */
 import { z } from "zod";
 import { inquirySchema } from "./schema";
 import { dayAvailability, isVenueSlug, monthAvailability, type DayAvailability } from "./availability";
@@ -47,9 +52,27 @@ export async function submitInquiry(_prev: InquiryState, formData: FormData): Pr
     };
   }
 
-  // Gerçek entegrasyon noktası: burada veritabanına yazılır ve e-posta gönderilir.
-  // (Örn. Resend + Postgres). Demo ortamında gecikme simüle edilir.
-  await new Promise((r) => setTimeout(r, 900));
+  // Entegrasyon noktası: NEXT_PUBLIC_INQUIRY_ENDPOINT tanımlıysa (örn. Formspree / Web3Forms)
+  // talep oraya iletilir; tanımlı değilse demo amaçlı gecikme simüle edilir.
+  const endpoint = process.env.NEXT_PUBLIC_INQUIRY_ENDPOINT;
+  if (endpoint) {
+    try {
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ ...data, website: undefined }),
+      });
+      if (!res.ok) throw new Error(String(res.status));
+    } catch {
+      return {
+        status: "error",
+        message: "Talebiniz iletilemedi. Lütfen bizi telefonla arayın ya da daha sonra tekrar deneyin.",
+        fieldErrors: {},
+      };
+    }
+  } else {
+    await new Promise((r) => setTimeout(r, 900));
+  }
 
   const reference =
     "SRN-" +

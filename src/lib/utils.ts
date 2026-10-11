@@ -16,7 +16,7 @@ export const SITE = {
   tagline: "Hayatınızın en güzel gecesi, bir senfoni gibi.",
   description:
     "Boğaz'a nazır üç eşsiz salon, yıldızlı mutfak ve 18 yıllık ustalık. Serenad, İstanbul'un en seçkin düğün ve davet adresi.",
-  url: "https://serenad.example.com",
+  url: "https://rebirthsoftware-code.github.io/dugun",
   phone: "+90 212 000 00 00",
   phoneHref: "tel:+902120000000",
   email: "merhaba@serenad.com.tr",
