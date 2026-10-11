@@ -1,0 +1,4 @@
+Cormorant Garamond (Christian Thalmann) ve Manrope (Mikhail Sharanda) yazı tipleri
+SIL Open Font License 1.1 ile lisanslanmıştır: https://openfontlicense.org
+Kaynak: https://github.com/google/fonts (ofl/cormorantgaramond, ofl/manrope)
+Dosyalar latin + latin-ext aralığına alt kümelenmiş değişken (variable) woff2 biçimindedir.

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Manrope } from "next/font/google";
+import localFont from "next/font/local";
 import { ViewTransition } from "react";
 import { Providers } from "@/components/layout/Providers";
 import { Header } from "@/components/layout/Header";
@@ -7,18 +7,20 @@ import { Footer } from "@/components/layout/Footer";
 import { SITE } from "@/lib/utils";
 import "./globals.css";
 
-const cormorant = Cormorant_Garamond({
+// Fontlar depoda yerel olarak tutulur: derleme ağ erişimine bağımlı değildir ve CI'da deterministiktir.
+const cormorant = localFont({
   variable: "--font-cormorant",
-  subsets: ["latin", "latin-ext"],
-  weight: ["300", "400", "500"],
-  style: ["normal", "italic"],
   display: "swap",
+  src: [
+    { path: "./fonts/CormorantGaramond.woff2", weight: "300 700", style: "normal" },
+    { path: "./fonts/CormorantGaramond-Italic.woff2", weight: "300 700", style: "italic" },
+  ],
 });
 
-const manrope = Manrope({
+const manrope = localFont({
   variable: "--font-manrope",
-  subsets: ["latin", "latin-ext"],
   display: "swap",
+  src: [{ path: "./fonts/Manrope.woff2", weight: "200 800", style: "normal" }],
 });
 
 export const metadata: Metadata = {
