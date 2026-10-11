@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 export function FAQ() {
   const [open, setOpen] = useState<number | null>(0);
   return (
-    <section id="sss" className="container-x scroll-mt-20 py-24 md:py-36" aria-label="Sık sorulan sorular">
+    <section id="sss" className="surface-ink container-x scroll-mt-20 py-24 md:py-36" aria-label="Sık sorulan sorular">
       <div className="grid gap-14 lg:grid-cols-[1fr_1.4fr]">
         <SectionHeading eyebrow="Sık sorulanlar" title="Aklınızdakiler." />
         <ul className="divide-y divide-ivory/10 border-y hairline">
@@ -42,7 +42,7 @@ export function FAQ() {
                       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                       className="overflow-hidden"
                     >
-                      <p className="max-w-2xl pb-7 text-base leading-relaxed text-ivory/70">{f.a}</p>
+                      <p className="max-w-2xl pb-7 text-base leading-relaxed text-tone-mute">{f.a}</p>
                     </motion.div>
                   )}
                 </AnimatePresence>

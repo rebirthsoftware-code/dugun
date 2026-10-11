@@ -17,7 +17,7 @@ export function SectionHeading({
   return (
     <div className={cn("flex flex-col gap-5", align === "center" && "items-center text-center", className)}>
       <span className="eyebrow flex items-center gap-3">
-        <span className="h-px w-8 bg-gold/60" />
+        <span className="h-px w-10 bg-current opacity-60" />
         {eyebrow}
       </span>
       <SplitWords as={as} text={title} className="font-display type-md text-balance" />

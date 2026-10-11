@@ -5,7 +5,8 @@ import Image from "next/image";
 import { motion, useScroll, useTransform } from "motion/react";
 import { ButtonLink } from "@/components/ui/Button";
 import { SplitWords } from "@/components/ui/Reveal";
-import { unsplash, SITE } from "@/lib/utils";
+import { photos } from "@/lib/data";
+import { SITE } from "@/lib/utils";
 
 export function CTA() {
   const ref = useRef<HTMLElement>(null);
@@ -13,15 +14,16 @@ export function CTA() {
   const y = useTransform(scrollYProgress, [0, 1], ["-12%", "12%"]);
 
   return (
-    <section ref={ref} className="relative flex min-h-[80vh] items-center overflow-hidden" aria-label="Davet">
+    <section ref={ref} className="relative flex min-h-[90vh] items-center overflow-hidden bg-ink" aria-label="Davet">
       <motion.div style={{ y }} className="absolute inset-[-12%_0]">
-        <Image src={unsplash("1519741497674-611481863552", 2000)} alt="" fill sizes="100vw" className="object-cover opacity-60" />
+        <Image src={photos.silhouette} alt="" fill sizes="100vw" className="object-cover" />
       </motion.div>
-      <div className="absolute inset-0 bg-gradient-to-b from-ink via-ink/50 to-ink" />
+      <div className="absolute inset-0 bg-gradient-to-b from-ink via-ink/40 to-ink" />
+      <div className="grain absolute inset-0" />
       <div className="container-x relative z-10 flex flex-col items-center py-32 text-center">
-        <span className="eyebrow mb-8">Bir kahve, bir tur, bir hayal</span>
+        <span className="eyebrow mb-8 text-gold">Bir kahve, bir tur, bir hayal</span>
         <SplitWords as="h2" text="Hikâyenizi birlikte yazalım." className="font-display type-lg text-ivory" />
-        <p className="mt-8 max-w-lg text-pretty text-base leading-relaxed text-ivory/70">
+        <p className="mt-8 max-w-lg text-pretty text-base leading-relaxed text-ivory/75">
           Salonları gezmek, menüyü tatmak ve tarihinizi konuşmak için sizi Kuruçeşme’ye bekliyoruz.
         </p>
         <div className="mt-12 flex flex-wrap justify-center gap-4">

@@ -3,15 +3,16 @@ import type { ComponentProps, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { Magnetic } from "./Magnetic";
 
-type Variant = "solid" | "outline" | "ghost";
+type Variant = "solid" | "outline" | "ghost" | "dark";
 
 const base =
   "group relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-full px-7 py-4 font-sans text-[11px] font-semibold uppercase tracking-[0.22em] transition-colors duration-500";
 
 const variants: Record<Variant, string> = {
-  solid: "bg-ivory text-ink hover:text-ivory",
-  outline: "border border-ivory/25 text-ivory hover:border-gold hover:text-ink",
-  ghost: "text-ivory/80 hover:text-gold px-0 py-0",
+  solid: "bg-ivory text-ink hover:text-ink",
+  dark: "bg-ink text-ivory hover:text-ink",
+  outline: "border border-current/25 text-current hover:border-gold hover:text-ink",
+  ghost: "text-current/80 hover:text-gold px-0 py-0",
 };
 
 function Inner({ children, variant }: { children: ReactNode; variant: Variant }) {

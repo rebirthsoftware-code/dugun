@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { testimonials } from "@/lib/data";
@@ -21,21 +22,22 @@ export function Testimonials() {
 
   return (
     <section
-      className="relative overflow-hidden border-t hairline bg-ink-2 py-24 md:py-40"
-      aria-label="Misafir yorumları"
+      className="surface-paper relative overflow-hidden py-24 md:py-36"
+      aria-label="Çiftlerimiz"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      <div aria-hidden className="pointer-events-none absolute -left-10 top-10 select-none font-display text-[26rem] leading-none text-ivory/[0.035]">
+      <div aria-hidden className="pointer-events-none absolute -left-6 top-6 select-none font-display text-[28rem] leading-none text-ink/[0.045]">
         “
       </div>
-      <div className="container-x relative grid gap-12 lg:grid-cols-[1fr_3fr]">
+      <div className="container-x relative grid gap-12 lg:grid-cols-[0.8fr_1.6fr_0.6fr] lg:gap-16">
         <FadeIn>
           <span className="eyebrow flex items-center gap-3">
-            <span className="h-px w-8 bg-gold/60" /> Çiftlerimiz
+            <span className="h-px w-10 bg-current opacity-60" /> Çiftlerimiz
           </span>
         </FadeIn>
-        <div className="min-h-[18rem]">
+
+        <div className="min-h-[16rem]">
           <AnimatePresence mode="wait">
             <motion.figure
               key={i}
@@ -44,11 +46,9 @@ export function Testimonials() {
               exit={{ opacity: 0, y: -24 }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             >
-              <blockquote className="font-display type-sm text-balance leading-[1.2] text-ivory">
-                {t.quote}
-              </blockquote>
-              <figcaption className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-2 font-sans text-[11px] uppercase tracking-[0.25em] text-mute">
-                <span className="text-gold">{t.name}</span>
+              <blockquote className="font-display type-sm text-balance leading-[1.2]">{t.quote}</blockquote>
+              <figcaption className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-2 font-sans text-[11px] uppercase tracking-[0.25em] text-tone-mute">
+                <span className="text-tone-gold">{t.name}</span>
                 <span>{t.venue}</span>
                 <span>{t.date}</span>
               </figcaption>
@@ -64,7 +64,7 @@ export function Testimonials() {
                 aria-selected={k === i}
                 aria-label={`${k + 1}. yorum`}
                 onClick={() => setI(k)}
-                className="relative h-px w-16 overflow-hidden bg-ivory/15"
+                className="relative h-px w-16 overflow-hidden bg-ink/15"
               >
                 {k === i && (
                   <motion.span
@@ -72,12 +72,27 @@ export function Testimonials() {
                     initial={{ scaleX: 0 }}
                     animate={{ scaleX: paused ? 0.5 : 1 }}
                     transition={{ duration: paused ? 0 : DURATION / 1000, ease: "linear" }}
-                    className="absolute inset-0 origin-left bg-gold"
+                    className="absolute inset-0 origin-left bg-gold-2"
                   />
                 )}
               </button>
             ))}
           </div>
+        </div>
+
+        <div className="relative hidden aspect-[3/4] overflow-hidden lg:block">
+          <AnimatePresence mode="sync">
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, scale: 1.08 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute inset-0"
+            >
+              <Image src={t.image} alt={t.name} fill sizes="25vw" className="object-cover" />
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
     </section>

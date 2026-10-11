@@ -1,24 +1,26 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { useLenis } from "lenis/react";
 import { SITE } from "@/lib/utils";
-import { venues } from "@/lib/data";
+import { photos, venues } from "@/lib/data";
 
 const primary = [
-  { href: "/", label: "Ana Sayfa", n: "01" },
-  { href: "/#mekanlar", label: "Mekânlar", n: "02" },
-  { href: "/#deneyim", label: "Deneyim", n: "03" },
-  { href: "/galeri", label: "Galeri", n: "04" },
-  { href: "/rezervasyon", label: "Rezervasyon", n: "05" },
+  { href: "/", label: "Ana Sayfa", n: "01", image: photos.ballroom },
+  { href: "/#mekanlar", label: "Mekânlar", n: "02", image: photos.stringLights },
+  { href: "/#deneyim", label: "Deneyim", n: "03", image: photos.plate },
+  { href: "/galeri", label: "Galeri", n: "04", image: photos.kissBW },
+  { href: "/rezervasyon", label: "Rezervasyon", n: "05", image: photos.silhouette },
 ];
 
 const ease = [0.76, 0, 0.24, 1] as const;
 
 export function Menu({ onClose }: { onClose: () => void }) {
   const lenis = useLenis();
+  const [hover, setHover] = useState<number | null>(null);
 
   useEffect(() => {
     lenis?.stop();
@@ -36,14 +38,33 @@ export function Menu({ onClose }: { onClose: () => void }) {
       role="dialog"
       aria-modal="true"
       aria-label="Site menüsü"
-      className="fixed inset-0 z-[90] overflow-hidden bg-ink-2 text-ivory"
+      className="fixed inset-0 z-[90] overflow-hidden bg-ink text-ivory"
       initial={{ clipPath: "inset(0 0 100% 0)" }}
       animate={{ clipPath: "inset(0 0 0% 0)" }}
       exit={{ clipPath: "inset(0 0 100% 0)" }}
       transition={{ duration: 0.9, ease }}
     >
-      <div className="container-x grid h-full grid-rows-[auto_1fr_auto] pt-[var(--header-h)] pb-8 lg:grid-cols-[1.4fr_1fr] lg:grid-rows-[1fr_auto]">
-        <nav className="flex flex-col justify-center gap-1 py-10 lg:py-0" aria-label="Menü">
+      {/* Hover görsel önizlemesi */}
+      <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-[42vw] lg:block" aria-hidden>
+        <AnimatePresence>
+          {hover !== null && (
+            <motion.div
+              key={hover}
+              initial={{ opacity: 0, scale: 1.06 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute inset-0"
+            >
+              <Image src={primary[hover].image} alt="" fill sizes="42vw" className="object-cover opacity-60" />
+              <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/30 to-transparent" />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      <div className="container-x relative grid h-full grid-rows-[auto_1fr_auto] pt-[var(--header-h)] pb-8 lg:grid-cols-[1.3fr_1fr] lg:grid-rows-[1fr_auto]">
+        <nav className="flex flex-col justify-center gap-1 py-10 lg:py-0" aria-label="Menü" onMouseLeave={() => setHover(null)}>
           {primary.map((l, i) => (
             <div key={l.href} className="line-mask">
               <motion.div
@@ -55,6 +76,8 @@ export function Menu({ onClose }: { onClose: () => void }) {
                 <Link
                   href={l.href}
                   onClick={onClose}
+                  onMouseEnter={() => setHover(i)}
+                  onFocus={() => setHover(i)}
                   className="group flex items-baseline gap-5 font-display text-[clamp(2.75rem,8vw,7rem)] leading-[1.02] text-ivory-2 transition-colors hover:text-gold"
                 >
                   <span className="font-sans text-[11px] tracking-[0.3em] text-mute">{l.n}</span>
@@ -73,7 +96,7 @@ export function Menu({ onClose }: { onClose: () => void }) {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.8, delay: 0.7 }}
-          className="hidden flex-col justify-center gap-10 border-l hairline pl-12 lg:flex"
+          className="relative z-10 hidden flex-col justify-center gap-10 border-l hairline pl-12 lg:flex"
         >
           <div>
             <p className="eyebrow mb-4">Salonlar</p>
@@ -109,7 +132,7 @@ export function Menu({ onClose }: { onClose: () => void }) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ delay: 0.9 }}
-          className="flex items-center justify-between border-t hairline pt-6 font-sans text-[11px] uppercase tracking-[0.25em] text-mute lg:col-span-2"
+          className="relative z-10 flex items-center justify-between border-t hairline pt-6 font-sans text-[11px] uppercase tracking-[0.25em] text-mute lg:col-span-2"
         >
           <span>İstanbul · Kuruçeşme</span>
           <a href={SITE.instagram} target="_blank" rel="noreferrer" className="hover:text-ivory">

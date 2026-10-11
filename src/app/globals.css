@@ -1,14 +1,16 @@
 @import "tailwindcss";
 
 @theme {
-  --color-ink: #0b0a0a;
-  --color-ink-2: #141212;
-  --color-ink-3: #1e1b1b;
-  --color-ivory: #f3ede3;
-  --color-ivory-2: #e4dccd;
-  --color-mute: #8d8578;
-  --color-gold: #d4b483;
-  --color-gold-2: #a98b5a;
+  --color-ink: #070707;
+  --color-ink-2: #0e0d0c;
+  --color-ink-3: #171514;
+  --color-paper: #efe8dc;
+  --color-paper-2: #e4dbcb;
+  --color-ivory: #f4efe6;
+  --color-ivory-2: #ddd4c3;
+  --color-mute: #8a8278;
+  --color-gold: #c9a66b;
+  --color-gold-2: #9c7a44;
   --color-rose: #c98a8a;
   --color-sage: #9db5a3;
 
@@ -59,7 +61,6 @@ body {
   color: var(--color-ink);
 }
 
-/* Fine-pointer devices hide the native cursor; the custom cursor takes over. */
 @media (pointer: fine) {
   html.custom-cursor,
   html.custom-cursor * {
@@ -68,7 +69,58 @@ body {
 }
 
 /* ------------------------------------------------------------------ */
-/* Typography utilities                                                */
+/* Tema yüzeyleri: koyu (ink) ve açık (paper) bölümler                   */
+/* ------------------------------------------------------------------ */
+@utility surface-paper {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  color-scheme: light;
+  --tone-fg: var(--color-ink);
+  --tone-mute: #6b6358;
+  --tone-line: color-mix(in oklab, var(--color-ink) 14%, transparent);
+  --tone-gold: var(--color-gold-2);
+}
+@utility surface-ink {
+  background: var(--color-ink);
+  color: var(--color-ivory);
+  --tone-fg: var(--color-ivory);
+  --tone-mute: var(--color-mute);
+  --tone-line: color-mix(in oklab, var(--color-ivory) 12%, transparent);
+  --tone-gold: var(--color-gold);
+}
+@utility surface-ink-2 {
+  background: var(--color-ink-2);
+  color: var(--color-ivory);
+  --tone-fg: var(--color-ivory);
+  --tone-mute: var(--color-mute);
+  --tone-line: color-mix(in oklab, var(--color-ivory) 12%, transparent);
+  --tone-gold: var(--color-gold);
+}
+
+/* Yüzeye göre renk alan yardımcılar */
+@utility text-tone {
+  color: var(--tone-fg, var(--color-ivory));
+}
+@utility text-tone-mute {
+  color: var(--tone-mute, var(--color-mute));
+}
+@utility text-tone-gold {
+  color: var(--tone-gold, var(--color-gold));
+}
+@utility border-tone {
+  border-color: var(--tone-line, color-mix(in oklab, var(--color-ivory) 12%, transparent));
+}
+@utility bg-tone-line {
+  background-color: var(--tone-line, color-mix(in oklab, var(--color-ivory) 12%, transparent));
+}
+@utility divide-tone {
+  & > :not(:last-child) {
+    border-color: var(--tone-line, color-mix(in oklab, var(--color-ivory) 12%, transparent));
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Tipografi                                                            */
 /* ------------------------------------------------------------------ */
 @utility font-display {
   font-family: var(--font-display);
@@ -77,41 +129,44 @@ body {
 }
 
 @utility type-xl {
-  font-size: clamp(3.25rem, 11vw, 11rem);
-  line-height: 0.92;
+  font-size: clamp(3.4rem, 10.5vw, 10.5rem);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
 }
 @utility type-lg {
-  font-size: clamp(2.75rem, 7.5vw, 7.5rem);
+  font-size: clamp(2.75rem, 7vw, 7rem);
   line-height: 0.95;
+  letter-spacing: -0.015em;
 }
 @utility type-md {
-  font-size: clamp(2.25rem, 5vw, 5rem);
+  font-size: clamp(2.25rem, 4.6vw, 4.75rem);
   line-height: 1;
 }
 @utility type-sm {
-  font-size: clamp(1.75rem, 3.2vw, 3rem);
-  line-height: 1.05;
+  font-size: clamp(1.7rem, 3vw, 2.9rem);
+  line-height: 1.08;
 }
 
 @utility eyebrow {
   font-family: var(--font-sans);
   font-size: 0.6875rem;
-  letter-spacing: 0.28em;
+  font-weight: 500;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: var(--color-gold);
+  color: var(--tone-gold, var(--color-gold));
 }
 
 @utility text-outline {
-  -webkit-text-stroke: 1px color-mix(in oklab, var(--color-ivory) 35%, transparent);
+  -webkit-text-stroke: 1px color-mix(in oklab, var(--tone-fg, var(--color-ivory)) 30%, transparent);
   color: transparent;
 }
 
 @utility container-x {
-  padding-inline: clamp(1.25rem, 4vw, 4.5rem);
+  padding-inline: clamp(1.25rem, 4.5vw, 5.5rem);
 }
 
 @utility hairline {
-  border-color: color-mix(in oklab, var(--color-ivory) 12%, transparent);
+  border-color: var(--tone-line, color-mix(in oklab, var(--color-ivory) 12%, transparent));
 }
 
 @utility grain {
@@ -127,13 +182,26 @@ body {
   }
 }
 
-/* ------------------------------------------------------------------ */
-/* Motion primitives                                                    */
-/* ------------------------------------------------------------------ */
-@keyframes marquee {
-  from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(-50%, 0, 0); }
+/* Menü tipografisinde noktalı dolgu */
+@utility leaders {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6em;
+  &::after {
+    content: "";
+    flex: 1;
+    order: 1;
+    border-bottom: 1px dotted color-mix(in oklab, var(--tone-fg, var(--color-ivory)) 35%, transparent);
+    transform: translateY(-0.25em);
+  }
+  & > :last-child {
+    order: 2;
+  }
 }
+
+/* ------------------------------------------------------------------ */
+/* Hareket                                                              */
+/* ------------------------------------------------------------------ */
 @keyframes spin-slow {
   to { transform: rotate(360deg); }
 }
@@ -141,23 +209,23 @@ body {
   from { background-position: 200% 0; }
   to { background-position: -200% 0; }
 }
-
-.animate-marquee {
-  animation: marquee 40s linear infinite;
+@keyframes kenburns {
+  from { transform: scale(1.08); }
+  to { transform: scale(1); }
 }
+@keyframes draw {
+  to { stroke-dashoffset: 0; }
+}
+
 .animate-spin-slow {
   animation: spin-slow 18s linear infinite;
 }
+.animate-kenburns {
+  animation: kenburns 6s var(--ease-out-expo) both;
+}
 
 .gold-shimmer {
-  background: linear-gradient(
-    110deg,
-    var(--color-gold-2) 0%,
-    var(--color-gold) 35%,
-    #f1e2c0 50%,
-    var(--color-gold) 65%,
-    var(--color-gold-2) 100%
-  );
+  background: linear-gradient(110deg, var(--color-gold-2) 0%, var(--color-gold) 35%, #f1e2c0 50%, var(--color-gold) 65%, var(--color-gold-2) 100%);
   background-size: 200% 100%;
   -webkit-background-clip: text;
   background-clip: text;
@@ -179,7 +247,15 @@ body {
   margin-bottom: -0.12em;
 }
 
-/* Reduced motion: keep layout, cut the theatre. */
+/* Yatay kaydırma şeridi: kaydırma çubuğunu gizle */
+.scroll-strip {
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+}
+.scroll-strip::-webkit-scrollbar {
+  display: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -191,7 +267,6 @@ body {
   }
 }
 
-/* View transitions between routes */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation-duration: 0.55s;

@@ -16,13 +16,13 @@ export function GalleryPreview() {
   const y3 = useTransform(scrollYProgress, [0, 1], [0, -200]);
 
   const cols = [
-    { y: y1, items: [gallery[0], gallery[6], gallery[3]] },
-    { y: y2, items: [gallery[2], gallery[1], gallery[9]] },
+    { y: y1, items: [gallery[1], gallery[6], gallery[3]] },
+    { y: y2, items: [gallery[2], gallery[12], gallery[9]] },
     { y: y3, items: [gallery[5], gallery[4], gallery[7]] },
   ];
 
   return (
-    <section className="container-x py-24 md:py-36" aria-label="Galeri">
+    <section className="surface-ink container-x py-24 md:py-36" aria-label="Galeri">
       <div className="mb-16 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
         <SectionHeading eyebrow="Galeri" title="Anlar, ışıkla yazılır." />
         <ButtonLink href="/galeri" variant="outline">

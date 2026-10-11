@@ -1,15 +1,15 @@
 import { Hero } from "@/components/hero/Hero";
-import { Marquee } from "@/components/ui/Marquee";
-import { Manifesto } from "@/components/sections/Manifesto";
+import { Intro } from "@/components/sections/Intro";
 import { Venues } from "@/components/sections/Venues";
-import { Experience } from "@/components/sections/Experience";
-import { Numbers } from "@/components/sections/Numbers";
+import { Flow } from "@/components/sections/Flow";
+import { Gastronomy } from "@/components/sections/Gastronomy";
+import { Services } from "@/components/sections/Services";
 import { GalleryPreview } from "@/components/sections/Gallery";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { Availability } from "@/components/sections/Availability";
 import { FAQ } from "@/components/sections/FAQ";
 import { CTA } from "@/components/sections/CTA";
-import { faqs, marqueeItems, venues } from "@/lib/data";
+import { faqs, venues } from "@/lib/data";
 import { SITE } from "@/lib/utils";
 
 export default function HomePage() {
@@ -43,11 +43,11 @@ export default function HomePage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Hero />
-      <Marquee items={marqueeItems} className="border-y hairline py-5" />
-      <Manifesto />
+      <Intro />
       <Venues />
-      <Experience />
-      <Numbers />
+      <Flow />
+      <Gastronomy />
+      <Services />
       <GalleryPreview />
       <Testimonials />
       <Availability />
