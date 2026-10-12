@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { venues } from "./data";
+import { eventTypes } from "./data";
 
-const venueSlugs = venues.map((v) => v.slug) as [string, ...string[]];
+const venueSlugs = eventTypes.map((v) => v.slug) as [string, ...string[]];
 
 export const inquirySchema = z.object({
   name: z.string().trim().min(2, "Adınızı yazın.").max(80, "Çok uzun."),

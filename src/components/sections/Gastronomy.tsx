@@ -13,7 +13,7 @@ export function Gastronomy() {
   const y = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"]);
 
   return (
-    <section ref={ref} className="surface-paper relative overflow-hidden" aria-label="Gastronomi">
+    <section ref={ref} className="surface-white relative overflow-hidden" aria-label="Gastronomi">
       <div className="container-x grid gap-16 py-24 md:py-36 lg:grid-cols-[1.1fr_0.9fr] lg:gap-24">
         <div>
           <FadeIn>
@@ -61,9 +61,9 @@ export function Gastronomy() {
             <div className="absolute inset-x-6 bottom-6 flex items-end justify-between text-ivory">
               <div>
                 <span className="eyebrow mb-2 block text-gold">Şef</span>
-                <span className="font-display text-3xl">Kerem Aydın</span>
+                <span className="font-display text-3xl">Konak Mutfağı</span>
               </div>
-              <span className="font-sans text-[10px] uppercase tracking-[0.25em] text-ivory/70">Michelin ★ tecrübesi</span>
+              <span className="font-sans text-[10px] uppercase tracking-[0.25em] text-ivory/70">Karadeniz dokunuşu</span>
             </div>
           </ClipReveal>
         </div>

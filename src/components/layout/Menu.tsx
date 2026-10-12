@@ -6,11 +6,11 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 import { useLenis } from "lenis/react";
 import { SITE } from "@/lib/utils";
-import { photos, venues } from "@/lib/data";
+import { photos, eventTypes } from "@/lib/data";
 
 const primary = [
   { href: "/", label: "Ana Sayfa", n: "01", image: photos.ballroom },
-  { href: "/#mekanlar", label: "Mekânlar", n: "02", image: photos.stringLights },
+  { href: "/#etkinlikler", label: "Etkinlikler", n: "02", image: photos.stringLights },
   { href: "/#deneyim", label: "Deneyim", n: "03", image: photos.plate },
   { href: "/galeri", label: "Galeri", n: "04", image: photos.kissBW },
   { href: "/rezervasyon", label: "Rezervasyon", n: "05", image: photos.silhouette },
@@ -99,17 +99,17 @@ export function Menu({ onClose }: { onClose: () => void }) {
           className="relative z-10 hidden flex-col justify-center gap-10 border-l hairline pl-12 lg:flex"
         >
           <div>
-            <p className="eyebrow mb-4">Salonlar</p>
+            <p className="eyebrow mb-4">Etkinlikler</p>
             <ul className="space-y-3">
-              {venues.map((v) => (
+              {eventTypes.map((v) => (
                 <li key={v.slug}>
                   <Link
-                    href={`/mekanlar/${v.slug}`}
+                    href={`/etkinlikler/${v.slug}`}
                     onClick={onClose}
                     className="flex items-center justify-between font-display text-2xl text-ivory/80 transition-colors hover:text-ivory"
                   >
                     <span>{v.name}</span>
-                    <span className="font-sans text-[11px] tracking-[0.2em] text-mute">{v.capacity.seated} kişi</span>
+                    <span className="font-sans text-[11px] tracking-[0.2em] text-mute">{v.capacity} kişi</span>
                   </Link>
                 </li>
               ))}
@@ -120,10 +120,10 @@ export function Menu({ onClose }: { onClose: () => void }) {
             <a href={SITE.phoneHref} className="block font-display text-2xl text-ivory/80 hover:text-ivory">
               {SITE.phone}
             </a>
-            <a href={`mailto:${SITE.email}`} className="block font-display text-2xl text-ivory/80 hover:text-ivory">
-              {SITE.email}
+            <a href={SITE.whatsapp} target="_blank" rel="noreferrer" className="block font-display text-2xl text-ivory/80 hover:text-ivory">
+              WhatsApp ile yazın
             </a>
-            <p className="mt-3 max-w-xs text-sm text-mute">{SITE.address}</p>
+            <p className="mt-3 max-w-xs text-sm text-mute">{SITE.addressFull}</p>
           </div>
         </motion.aside>
 
@@ -134,9 +134,9 @@ export function Menu({ onClose }: { onClose: () => void }) {
           transition={{ delay: 0.9 }}
           className="relative z-10 flex items-center justify-between border-t hairline pt-6 font-sans text-[11px] uppercase tracking-[0.25em] text-mute lg:col-span-2"
         >
-          <span>İstanbul · Kuruçeşme</span>
-          <a href={SITE.instagram} target="_blank" rel="noreferrer" className="hover:text-ivory">
-            Instagram ↗
+          <span>Trabzon · Ortahisar</span>
+          <a href={SITE.mapsHref} target="_blank" rel="noreferrer" className="hover:text-ivory">
+            Haritada aç ↗
           </a>
         </motion.div>
       </div>

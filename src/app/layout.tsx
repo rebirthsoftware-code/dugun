@@ -26,11 +26,11 @@ const manrope = localFont({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
-    default: `${SITE.name} · Düğün & Davet Salonu, İstanbul`,
+    default: `${SITE.fullName} · Trabzon`,
     template: `%s · ${SITE.name}`,
   },
   description: SITE.description,
-  keywords: ["düğün salonu", "davet salonu", "balo salonu", "İstanbul düğün", "Boğaz düğün", "kır düğünü", "nikâh"],
+  keywords: ["Trabzon düğün salonu", "Ortahisar düğün salonu", "kına gecesi Trabzon", "nişan salonu Trabzon", "matine Trabzon", "toplantı salonu Trabzon", "Konak düğün salonu"],
   openGraph: {
     type: "website",
     locale: "tr_TR",

@@ -9,7 +9,7 @@ const fmt = new Intl.DateTimeFormat("tr-TR", {
   second: "2-digit",
 });
 
-/** İstanbul yerel saati. Sunucuda boş; istemcide canlı. */
+/** Türkiye yerel saati. Sunucuda boş; istemcide canlı. */
 export function IstanbulClock() {
   const [time, setTime] = useState<string>("");
   useEffect(() => {

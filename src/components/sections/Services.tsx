@@ -13,7 +13,7 @@ export function Services() {
   const [active, setActive] = useState(0);
 
   return (
-    <section id="deneyim" className="surface-ink scroll-mt-20 py-24 md:py-36" aria-label="Deneyim">
+    <section id="deneyim" className="surface-paper scroll-mt-20 py-24 md:py-36" aria-label="Deneyim">
       <div className="container-x mb-16 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
         <SectionHeading eyebrow="Deneyim" title="Her detay, tek bir imzayla." />
         <p className="max-w-sm text-sm leading-relaxed text-tone-mute md:text-right">
@@ -22,7 +22,7 @@ export function Services() {
       </div>
 
       <div className="container-x grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-20">
-        <ul className="divide-y divide-ivory/10 border-y hairline" onMouseLeave={() => undefined}>
+        <ul className="divide-y divide-tone border-y border-tone">
           {services.map((s, i) => {
             const isActive = i === active;
             return (
@@ -40,7 +40,7 @@ export function Services() {
                     <span
                       className={cn(
                         "block font-display text-[clamp(2rem,4vw,3.6rem)] leading-none transition-all duration-500",
-                        isActive ? "translate-x-3 text-gold" : "text-ivory/80 group-hover:text-ivory",
+                        isActive ? "translate-x-3 text-gold-2" : "text-ink/70 group-hover:text-ink",
                       )}
                     >
                       {s.title}
@@ -54,7 +54,7 @@ export function Services() {
                           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                           className="block overflow-hidden"
                         >
-                          <span className="mt-4 block max-w-md translate-x-3 text-sm leading-relaxed text-ivory/65 md:text-base">
+                          <span className="mt-4 block max-w-md translate-x-3 text-sm leading-relaxed text-tone-mute md:text-base">
                             {s.text}
                           </span>
                           <span className="relative mt-5 block aspect-[4/3] translate-x-3 overflow-hidden lg:hidden">
@@ -92,7 +92,7 @@ export function Services() {
             </AnimatePresence>
             <div className="pointer-events-none absolute inset-x-6 bottom-6 flex items-end justify-between">
               <span className="font-display text-5xl text-ivory">0{active + 1}</span>
-              <span className="eyebrow">{services[active].eyebrow}</span>
+              <span className="eyebrow text-gold">{services[active].eyebrow}</span>
             </div>
           </div>
         </FadeIn>

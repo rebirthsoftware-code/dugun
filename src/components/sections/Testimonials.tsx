@@ -22,12 +22,12 @@ export function Testimonials() {
 
   return (
     <section
-      className="surface-paper relative overflow-hidden py-24 md:py-36"
+      className="surface-ink relative overflow-hidden py-24 md:py-36"
       aria-label="Çiftlerimiz"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      <div aria-hidden className="pointer-events-none absolute -left-6 top-6 select-none font-display text-[28rem] leading-none text-ink/[0.045]">
+      <div aria-hidden className="pointer-events-none absolute -left-6 top-6 select-none font-display text-[28rem] leading-none text-ivory/[0.04]">
         “
       </div>
       <div className="container-x relative grid gap-12 lg:grid-cols-[0.8fr_1.6fr_0.6fr] lg:gap-16">
@@ -64,7 +64,7 @@ export function Testimonials() {
                 aria-selected={k === i}
                 aria-label={`${k + 1}. yorum`}
                 onClick={() => setI(k)}
-                className="relative h-px w-16 overflow-hidden bg-ink/15"
+                className="relative h-px w-16 overflow-hidden bg-ivory/15"
               >
                 {k === i && (
                   <motion.span
@@ -72,7 +72,7 @@ export function Testimonials() {
                     initial={{ scaleX: 0 }}
                     animate={{ scaleX: paused ? 0.5 : 1 }}
                     transition={{ duration: paused ? 0 : DURATION / 1000, ease: "linear" }}
-                    className="absolute inset-0 origin-left bg-gold-2"
+                    className="absolute inset-0 origin-left bg-gold"
                   />
                 )}
               </button>

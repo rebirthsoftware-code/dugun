@@ -7,8 +7,8 @@
  */
 import { z } from "zod";
 import { inquirySchema } from "./schema";
-import { dayAvailability, isVenueSlug, monthAvailability, type DayAvailability } from "./availability";
-import { getVenue } from "./data";
+import { dayAvailability, isEventSlug, monthAvailability, type DayAvailability } from "./availability";
+import { getEventType } from "./data";
 
 export type InquiryState =
   | { status: "idle" }
@@ -89,7 +89,7 @@ export async function submitInquiry(_prev: InquiryState, formData: FormData): Pr
     status: "success",
     reference,
     summary: {
-      venue: getVenue(data.venue)?.name ?? data.venue,
+      venue: getEventType(data.venue)?.name ?? data.venue,
       date: data.date,
       guests: data.guests,
       name: data.name,
@@ -103,7 +103,7 @@ export async function getMonthAvailability(
   month: number,
   venue: string,
 ): Promise<DayAvailability[]> {
-  if (!Number.isInteger(year) || !Number.isInteger(month) || month < 1 || month > 12 || !isVenueSlug(venue)) {
+  if (!Number.isInteger(year) || !Number.isInteger(month) || month < 1 || month > 12 || !isEventSlug(venue)) {
     return [];
   }
   return monthAvailability(year, month, venue);

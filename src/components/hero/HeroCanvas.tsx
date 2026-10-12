@@ -90,16 +90,15 @@ const fragment = /* glsl */ `
     col = pow(col, vec3(1.12));
     col = mix(col, col * vec3(1.14, 1.0, 0.8), 0.75);
     col = mix(col, luma * vec3(0.98, 0.84, 0.62), 0.18);
-    float vig = smoothstep(1.25, 0.35, length((uv - 0.5) * vec2(1.1, 1.0)));
-    col *= mix(0.35, 1.0, vig);
-    // Sol-alt metin alanını hafifçe karart
-    col *= 1.0 - (1.0 - smoothstep(0.0, 0.7, uv.x)) * (1.0 - smoothstep(0.0, 0.8, uv.y)) * 0.45;
+    float vig = smoothstep(1.3, 0.3, length((uv - 0.5) * vec2(1.1, 1.0)));
+    col *= mix(0.62, 1.0, vig);
 
     // Film greni
     float g = fract(sin(dot(uv * uRes + mod(uTime, 10.0) * 100.0, vec2(12.9898, 78.233))) * 43758.5453);
     col += (g - 0.5) * 0.045;
 
-    col *= uIntro;
+    // Giriş: sayfa zemininin sıcak beyazından fotoğrafa geçiş
+    col = mix(vec3(0.984, 0.98, 0.968), col, uIntro);
     gl_FragColor = vec4(col, 1.0);
   }
 `;

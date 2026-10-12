@@ -20,15 +20,15 @@ export function Flow() {
   };
 
   return (
-    <section className="surface-ink-2 relative overflow-hidden py-24 md:py-36" aria-label="Günün akışı">
+    <section className="surface-paper relative overflow-hidden py-24 md:py-36" aria-label="Günün akışı">
       <div className="container-x mb-14 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-        <SectionHeading eyebrow="Günün akışı" title="Saat saat, bir Serenad gecesi." />
+        <SectionHeading eyebrow="Günün akışı" title="Saat saat, bir Konak gecesi." />
         <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={() => scrollBy(-1)}
             aria-label="Geri"
-            className="grid size-12 place-items-center rounded-full border border-ivory/15 transition-colors hover:bg-ivory hover:text-ink"
+            className="grid size-12 place-items-center rounded-full border border-tone-strong transition-colors hover:bg-ink hover:text-ivory"
           >
             <ArrowLeft className="size-4" />
           </button>
@@ -36,7 +36,7 @@ export function Flow() {
             type="button"
             onClick={() => scrollBy(1)}
             aria-label="İleri"
-            className="grid size-12 place-items-center rounded-full border border-ivory/15 transition-colors hover:bg-ivory hover:text-ink"
+            className="grid size-12 place-items-center rounded-full border border-tone-strong transition-colors hover:bg-ink hover:text-ivory"
           >
             <ArrowRight className="size-4" />
           </button>
@@ -73,7 +73,7 @@ export function Flow() {
               <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/10 to-transparent" />
               <span className="absolute left-5 top-5 font-display text-4xl text-ivory/90 tabular-nums">{t.time}</span>
               <div className="absolute inset-x-5 bottom-5">
-                <span className="eyebrow mb-2 block">{String(i + 1).padStart(2, "0")}</span>
+                <span className="eyebrow mb-2 block text-gold">{String(i + 1).padStart(2, "0")}</span>
                 <h3 className="font-display text-3xl text-ivory">{t.title}</h3>
                 <p className="mt-2 max-w-xs text-sm leading-relaxed text-ivory/70">{t.text}</p>
               </div>
@@ -84,9 +84,9 @@ export function Flow() {
       </div>
 
       <div className="container-x mt-8">
-        <div className="relative h-px w-full bg-ivory/10">
+        <div className="relative h-px w-full bg-tone-line">
           <motion.span
-            className="absolute left-0 top-0 h-px bg-gold"
+            className="absolute left-0 top-0 h-px bg-gold-2"
             animate={{ width: `${Math.max(8, progress * 100)}%` }}
             transition={{ type: "spring", stiffness: 120, damping: 24 }}
           />

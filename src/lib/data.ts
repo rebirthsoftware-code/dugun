@@ -1,10 +1,10 @@
 import { unsplash } from "./utils";
 
 /* ------------------------------------------------------------------ */
-/* Görsel kütüphanesi: tek yerden yönetilir, müşteri fotoğraflarıyla değiştirilir */
+/* Görsel kütüphanesi: tek yerden yönetilir, salonun kendi fotoğraflarıyla değiştirilir */
 /* ------------------------------------------------------------------ */
 export const photos = {
-  ballroom: unsplash("1519167758481-83f550bb49b3"), // kristal avizeli balo salonu
+  ballroom: unsplash("1519167758481-83f550bb49b3"), // kristal avizeli salon
   silhouette: unsplash("1537907690979-ee8e01276184"), // altın saatte çift silueti
   kissBW: unsplash("1460978812857-470ed1c77af0"), // siyah-beyaz duvaklı öpücük
   darkTable: unsplash("1522413452208-996ff3f3e740"), // koyu tonlu masa düzeni
@@ -14,7 +14,7 @@ export const photos = {
   sparklers: unsplash("1513725673171-537abba17912"), // maytap, gece kutlaması
   plate: unsplash("1470338950318-40320a722782"), // fine dining tabak
   fieldWalk: unsplash("1607190074257-dd4b7af0309f"), // gün batımında yürüyen çift
-  wineToast: unsplash("1510812431401-41d2bd2722f3"), // şarap kadehleri
+  wineToast: unsplash("1510812431401-41d2bd2722f3"), // kadehler
   dress: unsplash("1519657337289-077653f724ed"), // pencerede gelinlik
   confettiExit: unsplash("1583939003579-730e3918a45a"),
   lawnChairs: unsplash("1522673607200-164d1b6ce486"),
@@ -27,8 +27,6 @@ export const photos = {
   coupleBouquet: unsplash("1591604466107-ec97de577aff"),
   arch: unsplash("1529636798458-92182e662485"),
   aisle: unsplash("1469371670807-013ccf25f16a"),
-  galata: unsplash("1524231757912-21f4fe3a7200"),
-  bosphorusSunset: unsplash("1527838832700-5059252407fa"),
   bouquet: unsplash("1550005809-91ad75fb315f"),
   toast: unsplash("1519671482749-fd09be7ccebf"),
   confettiNight: unsplash("1505236858219-8359eb29e329"),
@@ -37,14 +35,19 @@ export const photos = {
   coupleDark: unsplash("1519741497674-611481863552"),
   beachVeil: unsplash("1537633552985-df8429e8048b"),
   dinner: unsplash("1515169067868-5387ec356754"),
+  party: unsplash("1492684223066-81342ee5ff30"),
 } as const;
 
-export type Venue = {
+/* ------------------------------------------------------------------ */
+/* Etkinlik türleri                                                     */
+/* ------------------------------------------------------------------ */
+export type EventType = {
   slug: string;
   name: string;
   subtitle: string;
-  capacity: { seated: number; cocktail: number };
-  area: number;
+  capacity: number;
+  duration: string;
+  format: string;
   description: string;
   story: string;
   features: string[];
@@ -54,24 +57,25 @@ export type Venue = {
   index: string;
 };
 
-export const venues: Venue[] = [
+export const eventTypes: EventType[] = [
   {
-    slug: "bogaz-salonu",
-    name: "Boğaz Salonu",
-    subtitle: "Büyük balo salonu",
-    capacity: { seated: 600, cocktail: 900 },
-    area: 1200,
+    slug: "dugun",
+    name: "Düğün",
+    subtitle: "Büyük gün",
+    capacity: 500,
+    duration: "6 saat",
+    format: "Oturmalı / kokteyl",
     description:
-      "Yedi metre tavan yüksekliği, Boğaz'a açılan on iki metrelik cam cephe ve altın yaprak detaylı kristal avizeler.",
+      "Kristal avizeler, geniş dans pisti ve profesyonel sahne ile Trabzon'da hayalinizdeki düğün gecesi.",
     story:
-      "Boğaz Salonu, denizin iki kıtayı ayırdığı noktada iki aileyi birleştirmek için tasarlandı. Gün batımında cam cephe kehribar rengine döner; gece ise şehrin ışıkları dansa eşlik eder. Sahne, dans pisti ve masa düzeni her davet için yeniden kurgulanır.",
+      "Konak'ta düğün, kapıdan girdiğiniz anda başlar. Gelin odası, karşılama kokteyli, ilk dans ve pasta kesimi tek bir ekip tarafından saniyesine kadar planlanır. Horon halkası kurulduğunda ışık ve ses sistemi geceye eşlik eder; misafirleriniz yalnızca kutlamayı düşünür.",
     features: [
-      "Boğaz manzaralı 12 m cam cephe",
-      "7 m tavan, kristal avizeler",
-      "Hidrolik sahne ve LED duvar",
-      "Gelin odası & damat lounge",
-      "Özel vale ve 300 araçlık otopark",
-      "Akustik tasarımlı ses sistemi",
+      "500 kişiye kadar oturmalı düzen",
+      "Geniş dans pisti ve profesyonel sahne",
+      "Gelin odası ve damat lounge",
+      "LED ışık mimarisi ve ses sistemi",
+      "Pasta, volta ve maytap gösterisi",
+      "Özel otopark ve vale",
     ],
     image: photos.ballroom,
     gallery: [photos.darkTable, photos.sparklers, photos.wineToast, photos.confettiNight],
@@ -79,55 +83,101 @@ export const venues: Venue[] = [
     index: "01",
   },
   {
-    slug: "kis-bahcesi",
-    name: "Kış Bahçesi",
-    subtitle: "Cam tavanlı sera salon",
-    capacity: { seated: 250, cocktail: 400 },
-    area: 540,
-    description:
-      "Yüz yıllık manolyaların arasında, yıldızların altında yemek. Cam tavan dört mevsim doğayla iç içe bir davet sunar.",
+    slug: "nisan",
+    name: "Nişan",
+    subtitle: "İlk adım",
+    capacity: 300,
+    duration: "4 saat",
+    format: "Oturmalı",
+    description: "Samimi, zarif ve iki ailenin ilk kez bir araya geldiği o özel güne yakışır bir atmosfer.",
     story:
-      "Eski bir seradan dönüştürülen Kış Bahçesi, demir ve camın zarafetini yaşayan bitkilerle buluşturur. Yağmur yağarken cam tavanda ritim tutar; kış gecelerinde ısıtmalı zemin ve şömine konuklarınızı sarar.",
+      "Nişan, iki ailenin ilk ortak fotoğrafıdır. Konak'ta nişan masası, yüzük kurdelesi ve çiçek tasarımı çiftin hikâyesine göre kurgulanır. Dilerseniz tek bir masa etrafında, dilerseniz yüzlerce konukla.",
     features: [
-      "Tamamen cam tavan",
-      "Yüz yıllık manolya bahçesi",
-      "Isıtmalı zemin ve açık şömine",
-      "Canlı bitki duvarı",
-      "Bahçe nikâh alanı",
-      "Dört mevsim kullanım",
+      "300 kişiye kadar esnek düzen",
+      "Nişan masası ve yüzük kurdele seremonisi",
+      "Çiçek ve dekor tasarımı",
+      "Canlı müzik ya da DJ seçeneği",
+      "Fotoğraf köşesi",
+      "Hafta içi özel fiyatlandırma",
     ],
-    image: photos.stringLights,
-    gallery: [photos.arch, photos.aisle, photos.tableSetting, photos.lawnChairs],
-    accent: "#9db5a3",
+    image: photos.ringsHands,
+    gallery: [photos.goldRings, photos.candles, photos.coupleBouquet, photos.tableSetting],
+    accent: "#c98a8a",
     index: "02",
   },
   {
-    slug: "teras",
-    name: "Teras",
-    subtitle: "Açık hava & gün batımı",
-    capacity: { seated: 120, cocktail: 220 },
-    area: 380,
-    description:
-      "Boğaz'ın tam üstünde, denize sıfır bir teras. Samimi nikâhlar, kokteyller ve gün batımı yemekleri için.",
+    slug: "kina",
+    name: "Kına",
+    subtitle: "Gelenek ve eğlence",
+    capacity: 400,
+    duration: "5 saat",
+    format: "Oturmalı / sahne",
+    description: "Kına tepsisinden horona, geleneği modern bir sahnede yaşatan unutulmaz bir gece.",
     story:
-      "Teras, yalnızca en yakınlarınızla kutlamak isteyenler için. Deniz kokusu, yakamoz ve köprünün ışıkları; evet dediğiniz anın arka planı olur. Yaz akşamlarında şef masası ve canlı caz ile tamamlanır.",
+      "Kına gecesi, Karadeniz'de en çok coşkunun olduğu gecedir. Kına tahtı, bindallı ve tepsi seremonisi için sahne ışıkları özel olarak kurulur; kemençe ve davul için akustik hazırlık yapılır.",
     features: [
-      "Denize sıfır konum",
-      "Gün batımı nikâh alanı",
-      "Açık hava şef masası",
-      "Canlı caz & akustik set",
-      "Yedek kapalı alan garantisi",
-      "Tekne ile ulaşım iskelesi",
+      "400 kişiye kadar düzen",
+      "Kına tahtı ve seremoni ışıkları",
+      "Kemençe, davul ve DJ için sahne",
+      "Horon için geniş dans alanı",
+      "Kına tepsisi ve ikramlıklar",
+      "Bindallı için hazırlık odası",
     ],
-    image: photos.galata,
-    gallery: [photos.fieldWalk, photos.toast, photos.bosphorusSunset, photos.dinner],
-    accent: "#c98a8a",
+    image: photos.sparklers,
+    gallery: [photos.party, photos.confettiNight, photos.candles, photos.toast],
+    accent: "#b0574f",
     index: "03",
+  },
+  {
+    slug: "matine",
+    name: "Matine",
+    subtitle: "Gündüz kutlaması",
+    capacity: 400,
+    duration: "4 saat",
+    format: "Gündüz · oturmalı",
+    description: "Gün ışığında, ailece ve rahat; kadınlar matinesi ve gündüz düğünleri için ferah bir salon.",
+    story:
+      "Matine, gündüz kutlamanın en keyifli hâlidir. Doğal ışık alan salonda ikram masaları, canlı müzik ve çocuklar için güvenli alan ile aileler rahat eder.",
+    features: [
+      "400 kişiye kadar gündüz düzeni",
+      "Doğal ışık ve klimalı salon",
+      "İkram ve çay-kahve servisi",
+      "Canlı müzik ya da DJ",
+      "Çocuk alanı",
+      "Hafta içi uygun fiyat",
+    ],
+    image: photos.stringLights,
+    gallery: [photos.glasses, photos.bouquet, photos.lawnChairs, photos.arch],
+    accent: "#9db5a3",
+    index: "04",
+  },
+  {
+    slug: "toplanti",
+    name: "Toplantı",
+    subtitle: "Kurumsal",
+    capacity: 300,
+    duration: "Yarım / tam gün",
+    format: "Sınıf · U · tiyatro",
+    description: "Lansman, seminer, bayi toplantısı ve kurumsal davetler için teknik altyapısı hazır bir salon.",
+    story:
+      "Konak, hafta içi kurumsal etkinliklere de ev sahipliği yapar. Projeksiyon, kablosuz mikrofon, hızlı internet ve kahve molası düzeni ile tam gün toplantılar için hazırdır.",
+    features: [
+      "300 kişiye kadar sınıf, U ya da tiyatro düzeni",
+      "Projeksiyon, LED ekran ve ses sistemi",
+      "Kablosuz mikrofon ve kürsü",
+      "Hızlı Wi-Fi",
+      "Kahve molası ve öğle yemeği seçenekleri",
+      "Şehir merkezinde kolay ulaşım",
+    ],
+    image: photos.dinner,
+    gallery: [photos.barBokeh, photos.plate, photos.tableSetting, photos.darkTable],
+    accent: "#7a8ca3",
+    index: "05",
   },
 ];
 
-export function getVenue(slug: string) {
-  return venues.find((v) => v.slug === slug);
+export function getEventType(slug: string) {
+  return eventTypes.find((v) => v.slug === slug);
 }
 
 export type Service = { id: string; title: string; eyebrow: string; text: string; image: string };
@@ -137,79 +187,79 @@ export const services: Service[] = [
     id: "gastronomi",
     eyebrow: "Mutfak",
     title: "Gastronomi",
-    text: "Michelin tecrübeli şef ekibimiz menüyü hikâyenize göre yazar. Anadolu'dan Akdeniz'e, tadım oturumlarıyla son hâlini alır.",
+    text: "Kendi mutfağımızda, Karadeniz lezzetlerinden klasik düğün menülerine; tadım oturumuyla menüyü birlikte belirleriz.",
     image: photos.plate,
   },
   {
     id: "dekor",
     eyebrow: "Tasarım",
     title: "Dekor & Çiçek",
-    text: "Kendi atölyemizde her davet için sıfırdan tasarlanan masa düzeni, çiçek enstalasyonları ve ışık mimarisi.",
+    text: "Masa düzeni, nişan masası, kına tahtı ve çiçek tasarımı; her etkinlik için size özel kurulur.",
     image: photos.candles,
   },
   {
     id: "muzik",
     eyebrow: "Sahne",
     title: "Müzik & Işık",
-    text: "Orkestradan DJ'e, lazer haritalamadan mum ışığına. Gecenin ritmini profesyonel sahne ekibimiz kurar.",
+    text: "Kemençeden DJ'e, LED ışık mimarisinden maytap gösterisine. Gecenin ritmini profesyonel ekibimiz kurar.",
     image: photos.sparklers,
   },
   {
     id: "planlama",
     eyebrow: "Koordinasyon",
     title: "Planlama",
-    text: "İlk görüşmeden son dansa kadar tek bir isim: size özel koordinatörünüz. Zaman çizelgesi, tedarikçi, prova, kriz yönetimi.",
+    text: "İlk görüşmeden son dansa kadar tek bir isim: size özel koordinatörünüz. Zaman çizelgesi, tedarikçi ve prova.",
     image: photos.dress,
   },
   {
-    id: "konaklama",
+    id: "ulasim",
     eyebrow: "Misafirperverlik",
-    title: "Konaklama & Ulaşım",
-    text: "Anlaşmalı butik oteller, vale, konuk transferi ve Boğaz'dan tekne ile giriş. Konuklarınız yalnızca kutlamayı düşünür.",
+    title: "Ulaşım & Otopark",
+    text: "Ortahisar'ın merkezinde, şehir içi ulaşıma yakın; özel otopark, vale ve konuk transferi seçenekleri.",
     image: photos.dinner,
   },
 ];
 
 export const timeline = [
-  { time: "15:00", title: "Hazırlık", text: "Gelin süiti ve damat lounge'da kuaför, makyaj, fotoğraf.", image: photos.dress },
-  { time: "18:30", title: "Nikâh", text: "Gün batımına beş dakika kala, Boğaz'a karşı 'evet'.", image: photos.aisle },
-  { time: "19:15", title: "Kokteyl", text: "Terasta canlı caz, imza kokteyller, karşılama kanepeleri.", image: photos.wineToast },
-  { time: "20:30", title: "Yemek", text: "Beş tabaklı tadım menüsü, şefin masada sunumu.", image: photos.darkTable },
-  { time: "22:30", title: "Dans", text: "İlk dans, orkestra, sonra DJ. Işık mimarisi geceye döner.", image: photos.sparklers },
-  { time: "01:00", title: "Uğurlama", text: "Maytaplı çıkış, gece atıştırmalığı, konuk transferleri.", image: photos.confettiExit },
+  { time: "15:00", title: "Hazırlık", text: "Gelin odasında kuaför, makyaj ve fotoğraf çekimi.", image: photos.dress },
+  { time: "18:30", title: "Karşılama", text: "Konuk karşılama, ikramlıklar ve fotoğraf köşesi.", image: photos.wineToast },
+  { time: "19:30", title: "Giriş", text: "Çiftin salona girişi, ilk dans ve ışık gösterisi.", image: photos.aisle },
+  { time: "20:30", title: "Yemek", text: "Tadım menüsü, Karadeniz sofrası ve pasta kesimi.", image: photos.darkTable },
+  { time: "22:00", title: "Horon", text: "Kemençe, davul ve DJ. Pist dolar, ışıklar geceye döner.", image: photos.sparklers },
+  { time: "00:30", title: "Uğurlama", text: "Maytaplı çıkış ve konuk uğurlama.", image: photos.confettiExit },
 ];
 
 export const tastingMenu = {
-  intro: "Her menü çift için yeniden yazılır. Örnek bir sonbahar akşamı:",
+  intro: "Her menü çift için yeniden yazılır. Karadeniz dokunuşlu örnek bir düğün sofrası:",
   courses: [
     {
       name: "Karşılama",
       items: [
-        { name: "Boğaz levreği tartar, limon kavyarı", note: "" },
-        { name: "Kuru incir & keçi peyniri tartolet", note: "v" },
-        { name: "İmza kokteyl: Serenad Spritz", note: "" },
+        { name: "Mini Laz böreği", note: "" },
+        { name: "Muhlama kaşıkları, mısır ekmeği", note: "v" },
+        { name: "Karşılama kokteyli ve şerbet", note: "" },
       ],
     },
     {
       name: "Ara sıcak",
       items: [
-        { name: "Mantar kapuçino, trüf yağı", note: "v" },
-        { name: "Karides güveç, tereyağlı ekmek", note: "" },
+        { name: "Hamsili pilav", note: "" },
+        { name: "Mantar dolgulu mini kalem börek", note: "v" },
       ],
     },
     {
       name: "Ana",
       items: [
-        { name: "Kuzu kol konfi, kestane püresi, nar", note: "" },
-        { name: "Közlenmiş kalkan, beurre blanc, yabani ot", note: "" },
-        { name: "Kabak çiçeği risotto", note: "v" },
+        { name: "Akçaabat köfte, pilav, közlenmiş biber", note: "" },
+        { name: "Tereyağlı kalkan ya da levrek", note: "" },
+        { name: "Sebzeli güveç", note: "v" },
       ],
     },
     {
       name: "Tatlı",
       items: [
-        { name: "Düğün pastası: fıstık, gül, beyaz çikolata", note: "" },
-        { name: "Antep fıstıklı katmer, kaymak dondurma", note: "" },
+        { name: "Düğün pastası", note: "" },
+        { name: "Hamsiköy sütlacı ve fındıklı baklava", note: "" },
       ],
     },
   ],
@@ -237,56 +287,56 @@ export const gallery = [
 export const testimonials = [
   {
     quote:
-      "Boğaz Salonu'na ilk girdiğimizde kararımız kesinleşmişti. Düğün günü ise hayal ettiğimizin ötesindeydi; koordinatörümüz Elif adeta bir orkestra şefiydi.",
-    name: "Zeynep & Can",
+      "Konak'a ilk girdiğimizde kararımız kesinleşmişti. Düğün günü hayal ettiğimizin ötesindeydi; koordinatörümüz adeta bir orkestra şefiydi.",
+    name: "Büşra & Emre",
     date: "Eylül 2025",
-    venue: "Boğaz Salonu",
+    venue: "Düğün",
     image: photos.kissBW,
   },
   {
     quote:
-      "Yağmur yağdı ve Kış Bahçesi'nin cam tavanında ritim tuttu. Herkes 'bunu da siz mi planladınız' diye sordu. Hâlâ konuşuluyor.",
-    name: "Deniz & Arda",
-    date: "Kasım 2025",
-    venue: "Kış Bahçesi",
-    image: photos.stringLights,
+      "Kına gecemizde horon halkası hiç dağılmadı. Işık, ses, kemençe; her şey tam zamanında ve tam yerindeydi.",
+    name: "Melisa & Burak",
+    date: "Ağustos 2025",
+    venue: "Kına",
+    image: photos.sparklers,
   },
   {
     quote:
-      "Kırk kişilik, küçük ama unutulmaz bir nikâh istiyorduk. Teras'ta gün batımı, caz ve şef masası. Mükemmel kelimesi hafif kalır.",
-    name: "Selin & Mert",
+      "Nişanımız için samimi ama şık bir yer istiyorduk. Masa düzeni ve ikramlar herkesin aklında kaldı. Teşekkürler Konak.",
+    name: "Zeynep & Can",
     date: "Haziran 2025",
-    venue: "Teras",
-    image: photos.silhouette,
+    venue: "Nişan",
+    image: photos.ringsHands,
   },
 ];
 
 export const faqs = [
   {
     q: "Tarih için ne kadar önceden rezervasyon yapmalıyız?",
-    a: "Mayıs–Ekim arası cumartesi akşamları genellikle 12–14 ay önceden dolar. Hafta içi ve kış tarihleri için 4–6 ay yeterli olabilir. Takvimden anlık uygunluğu görebilirsiniz.",
+    a: "Haziran–Eylül arası cumartesi akşamları genellikle 8–12 ay önceden dolar. Hafta içi, matine ve kış tarihleri için 2–4 ay yeterli olabilir. Takvimden anlık uygunluğu görebilirsiniz.",
   },
   {
     q: "Fiyatlandırma nasıl çalışıyor?",
-    a: "Kişi başı menü bedeli ile salon kullanım bedelinin toplamı üzerinden, sezon ve güne göre değişen bir fiyatlandırma uygularız. Dekor, müzik ve fotoğraf hizmetleri modüler olarak eklenir; sürpriz kalem yoktur.",
+    a: "Kişi başı menü bedeli ile salon kullanım bedelinin toplamı üzerinden, sezon, gün ve etkinlik türüne göre değişen bir fiyatlandırma uygularız. Dekor, müzik ve fotoğraf hizmetleri modüler olarak eklenir; sürpriz kalem yoktur.",
   },
   {
     q: "Kendi tedarikçilerimizle çalışabilir miyiz?",
-    a: "Evet. Fotoğrafçı, DJ ve pasta gibi kalemlerde dış tedarikçi kabul ederiz. Mutfak ve bar hizmeti ise kalite ve gıda güvenliği nedeniyle yalnızca Serenad ekibi tarafından verilir.",
+    a: "Evet. Fotoğrafçı, DJ, kemençeci ve pasta gibi kalemlerde dış tedarikçi kabul ederiz. Mutfak hizmeti ise kalite ve gıda güvenliği nedeniyle yalnızca Konak ekibi tarafından verilir.",
   },
   {
-    q: "Yağmur ihtimaline karşı planınız nedir?",
-    a: "Teras ve bahçe etkinliklerinde, aynı tarih için kapalı alan garantisi veririz. Karar, etkinlikten 6 saat önce meteoroloji verisiyle birlikte sizinle alınır.",
+    q: "Kına ve nişan için en az kaç kişi gerekiyor?",
+    a: "Kına ve nişan için en az 50 kişi ile rezervasyon alıyoruz. Daha küçük gruplar için hafta içi özel düzenler sunabiliriz.",
   },
   {
     q: "Menü tadımı ne zaman yapılıyor?",
-    a: "Sözleşme sonrası, etkinlikten 2–3 ay önce şefimizle birlikte özel tadım oturumu düzenlenir. Tadım 6 kişiye kadar ücretsizdir.",
+    a: "Sözleşme sonrası, etkinlikten 1–2 ay önce mutfak ekibimizle birlikte özel tadım oturumu düzenlenir. Tadım 4 kişiye kadar ücretsizdir.",
   },
 ];
 
 export const stats = [
-  { value: 1200, suffix: "+", label: "Düğün & davet" },
-  { value: 18, suffix: "", label: "Yıllık ustalık" },
-  { value: 3, suffix: "", label: "Eşsiz salon" },
+  { value: 500, suffix: "+", label: "Kişi kapasite" },
+  { value: 5, suffix: "", label: "Etkinlik türü" },
+  { value: 7, suffix: "/7", label: "Gün hizmet" },
   { value: 4.9, suffix: "", label: "Misafir puanı", decimals: 1 },
 ];

@@ -43,8 +43,8 @@ export function Preloader({ onDone }: { onDone: () => void }) {
           aria-hidden
         >
           <div className="flex items-center justify-between font-sans text-[10px] uppercase tracking-[0.35em] text-mute">
-            <span>Kuruçeşme · İstanbul</span>
-            <span>Est. 2008</span>
+            <span>Ortahisar · Trabzon</span>
+            <span>Düğün Salonu</span>
           </div>
 
           <div className="flex flex-col items-center gap-10">
@@ -81,7 +81,7 @@ export function Preloader({ onDone }: { onDone: () => void }) {
                 transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
                 className="font-display text-[clamp(2.5rem,6vw,5rem)] tracking-[0.18em] text-ivory"
               >
-                SERENAD
+                KONAK
               </motion.p>
             </div>
           </div>

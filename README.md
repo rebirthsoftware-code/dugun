@@ -1,6 +1,6 @@
-# Serenad — Düğün & Davet Salonu
+# Konak Düğün Salonu — Trabzon
 
-Boğaz'a nazır bir düğün salonu için tasarlanmış, Next.js 16'nın en yeni yeteneklerini sergileyen editoryal bir vitrin sitesi.
+Trabzon Ortahisar'daki Konak Düğün Salonu için tasarlanmış, Next.js 16'nın en yeni yeteneklerini sergileyen editoryal bir vitrin sitesi. Düğün, nişan, kına, matine ve toplantı organizasyonları.
 
 ## Öne çıkanlar
 
@@ -39,7 +39,7 @@ pnpm lint
 ```
 src/
   app/                 # rotalar, metadata, OG görselleri
-    mekanlar/[slug]/   # statik üretilen salon sayfaları
+    etkinlikler/[slug]/ # düğün, nişan, kına, matine, toplantı sayfaları
     galeri/            # lightbox'lı galeri
     rezervasyon/       # takvim + talep formu
   components/
@@ -48,7 +48,7 @@ src/
     sections/          # Manifesto, Venues, Experience, Gallery, Availability, FAQ...
     ui/                # Reveal, Magnetic, Cursor, Button, Marquee
   lib/
-    data.ts            # salonlar, hizmetler, galeri, SSS
+    data.ts            # etkinlik türleri, hizmetler, menü, galeri, SSS
     availability.ts    # deterministik uygunluk motoru
     actions.ts         # Server Actions (talep + uygunluk)
     schema.ts          # Zod şemaları
@@ -56,6 +56,7 @@ src/
 
 ## Üretime alırken
 
-- `src/lib/utils.ts` içindeki `SITE` sabitlerini (alan adı, telefon, adres) güncelleyin.
+- `src/lib/utils.ts` içindeki `SITE` sabitleri (telefon, adres, WhatsApp) Konak'ın bilgileriyle doludur; alan adı bağlanınca `url` alanını güncelleyin.
+- Kapasite, süre ve fiyat değerleri `src/lib/data.ts` ve `src/lib/availability.ts` içinde yer tutucudur; salonun gerçek değerleriyle güncelleyin.
 - Talep formunu gerçek bir kutuya bağlamak için `NEXT_PUBLIC_INQUIRY_ENDPOINT` değişkenine bir Formspree / Web3Forms adresi verin (workflow'da repo secret olarak tanımlanabilir).
 - Görseller Unsplash'tan gelir; müşterinin kendi fotoğraflarını `src/lib/data.ts` üzerinden bağlayın.

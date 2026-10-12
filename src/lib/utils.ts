@@ -11,17 +11,20 @@ export function unsplash(id: string, w = 1600, extra = "") {
 }
 
 export const SITE = {
-  name: "Serenad",
-  fullName: "Serenad Davet & Balo Salonu",
-  tagline: "Hayatınızın en güzel gecesi, bir senfoni gibi.",
+  name: "Konak",
+  fullName: "Konak Düğün Salonu",
+  tagline: "Hayatınızın en güzel günü, Konak'ta.",
   description:
-    "Boğaz'a nazır üç eşsiz salon, yıldızlı mutfak ve 18 yıllık ustalık. Serenad, İstanbul'un en seçkin düğün ve davet adresi.",
+    "Trabzon Ortahisar'da düğün, nişan, kına, matine ve toplantı organizasyonları için şık, ferah ve profesyonel bir salon.",
   url: "https://rebirthsoftware-code.github.io/dugun",
-  phone: "+90 212 000 00 00",
-  phoneHref: "tel:+902120000000",
-  email: "merhaba@serenad.com.tr",
-  address: "Kuruçeşme Cad. No: 1, Beşiktaş / İstanbul",
-  mapsHref: "https://maps.google.com/?q=Kuru%C3%A7e%C5%9Fme%20%C4%B0stanbul",
-  instagram: "https://instagram.com",
-  founded: 2008,
+  city: "Trabzon",
+  district: "Ortahisar",
+  phone: "0 (536) 726 57 53",
+  phoneHref: "tel:+905367265753",
+  whatsapp: "https://wa.me/905367265753?text=Merhaba%2C%20Konak%20D%C3%BC%C4%9F%C3%BCn%20Salonu%20i%C3%A7in%20bilgi%20almak%20istiyorum.",
+  address: "Gazipaşa Mah. Cudibey Mektep Sok. No: 3/A",
+  addressFull: "Gazipaşa Mah. Cudibey Mektep Sok. No: 3/A, Ortahisar / Trabzon",
+  mapsHref: "https://maps.google.com/?q=Gazipa%C5%9Fa%20Mah.%20Cudibey%20Mektep%20Sok.%20No%3A3%2FA%20Ortahisar%20Trabzon",
+  coords: "41°00′N 39°43′E",
+  geo: { lat: 41.0027, lng: 39.7168 },
 } as const;

@@ -13,7 +13,7 @@ export function Intro() {
   const imgY = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"]);
 
   return (
-    <section ref={ref} className="surface-paper relative overflow-hidden" aria-label="Serenad hakkında">
+    <section ref={ref} className="surface-white relative overflow-hidden" aria-label="Konak hakkında">
       <div className="container-x grid gap-16 py-24 md:py-36 lg:grid-cols-[0.9fr_1.1fr] lg:gap-24">
         <ClipReveal className="relative order-2 lg:order-1">
           <div className="relative aspect-[3/4] overflow-hidden">
@@ -28,15 +28,15 @@ export function Intro() {
             </motion.div>
           </div>
           <FadeIn delay={0.4} className="mt-4 flex items-center justify-between font-sans text-[10px] uppercase tracking-[0.3em] text-tone-mute">
-            <span>Zeynep & Can · Eylül 2025</span>
-            <span>Boğaz Salonu</span>
+            <span>Büşra & Emre · Eylül 2025</span>
+            <span>Konak · Düğün</span>
           </FadeIn>
         </ClipReveal>
 
         <div className="order-1 flex flex-col justify-center lg:order-2">
           <FadeIn>
             <span className="eyebrow flex items-center gap-3">
-              <span className="h-px w-10 bg-current opacity-60" /> Serenad
+              <span className="h-px w-10 bg-current opacity-60" /> Konak
             </span>
           </FadeIn>
           <SplitWords
@@ -46,9 +46,9 @@ export function Intro() {
           />
           <FadeIn delay={0.25}>
             <p className="mt-8 max-w-xl text-base leading-relaxed text-tone-mute md:text-lg">
-              On sekiz yıldır Kuruçeşme kıyısında, her çiftin hikâyesine ayrı bir sahne kuruyoruz. Üç salon, tek mutfak,
-              tek koordinatör ve sürpriz bırakmayan bir plan. Gecenin sonunda konuklarınız yalnızca bir şeyi hatırlar:
-              nasıl hissettiklerini.
+              Trabzon Ortahisar’da, şehrin merkezinde; düğünden nişana, kınadan matineye ve kurumsal toplantıya her
+              etkinliğe ayrı bir sahne kuruyoruz. Tek mutfak, tek koordinatör ve sürpriz bırakmayan bir plan. Gecenin
+              sonunda konuklarınız yalnızca bir şeyi hatırlar: nasıl hissettiklerini.
             </p>
           </FadeIn>
 

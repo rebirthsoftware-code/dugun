@@ -24,12 +24,15 @@ export function CTA() {
         <span className="eyebrow mb-8 text-gold">Bir kahve, bir tur, bir hayal</span>
         <SplitWords as="h2" text="Hikâyenizi birlikte yazalım." className="font-display type-lg text-ivory" />
         <p className="mt-8 max-w-lg text-pretty text-base leading-relaxed text-ivory/75">
-          Salonları gezmek, menüyü tatmak ve tarihinizi konuşmak için sizi Kuruçeşme’ye bekliyoruz.
+          Salonu gezmek, menüyü tatmak ve tarihinizi konuşmak için sizi Ortahisar’a bekliyoruz.
         </p>
         <div className="mt-12 flex flex-wrap justify-center gap-4">
           <ButtonLink href="/rezervasyon">Tarih Sorgula</ButtonLink>
           <ButtonLink href={SITE.phoneHref} variant="outline" magnetic={false}>
             {SITE.phone}
+          </ButtonLink>
+          <ButtonLink href={SITE.whatsapp} variant="outline" magnetic={false} target="_blank" rel="noreferrer">
+            WhatsApp
           </ButtonLink>
         </div>
       </div>

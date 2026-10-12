@@ -1,6 +1,6 @@
 import { Hero } from "@/components/hero/Hero";
 import { Intro } from "@/components/sections/Intro";
-import { Venues } from "@/components/sections/Venues";
+import { EventTypes } from "@/components/sections/EventTypes";
 import { Flow } from "@/components/sections/Flow";
 import { Gastronomy } from "@/components/sections/Gastronomy";
 import { Services } from "@/components/sections/Services";
@@ -9,7 +9,7 @@ import { Testimonials } from "@/components/sections/Testimonials";
 import { Availability } from "@/components/sections/Availability";
 import { FAQ } from "@/components/sections/FAQ";
 import { CTA } from "@/components/sections/CTA";
-import { faqs, venues } from "@/lib/data";
+import { faqs, eventTypes } from "@/lib/data";
 import { SITE } from "@/lib/utils";
 
 export default function HomePage() {
@@ -22,11 +22,15 @@ export default function HomePage() {
         description: SITE.description,
         url: SITE.url,
         telephone: SITE.phone,
-        email: SITE.email,
-        address: { "@type": "PostalAddress", streetAddress: SITE.address, addressLocality: "İstanbul", addressCountry: "TR" },
-        geo: { "@type": "GeoCoordinates", latitude: 41.055, longitude: 29.035 },
-        maximumAttendeeCapacity: Math.max(...venues.map((v) => v.capacity.cocktail)),
-        aggregateRating: { "@type": "AggregateRating", ratingValue: 4.9, reviewCount: 412 },
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: SITE.address,
+          addressLocality: SITE.district,
+          addressRegion: SITE.city,
+          addressCountry: "TR",
+        },
+        geo: { "@type": "GeoCoordinates", latitude: SITE.geo.lat, longitude: SITE.geo.lng },
+        maximumAttendeeCapacity: Math.max(...eventTypes.map((v) => v.capacity)),
       },
       {
         "@type": "FAQPage",
@@ -44,7 +48,7 @@ export default function HomePage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Hero />
       <Intro />
-      <Venues />
+      <EventTypes />
       <Flow />
       <Gastronomy />
       <Services />

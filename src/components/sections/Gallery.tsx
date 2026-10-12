@@ -22,7 +22,7 @@ export function GalleryPreview() {
   ];
 
   return (
-    <section className="surface-ink container-x py-24 md:py-36" aria-label="Galeri">
+    <section className="surface-white container-x py-24 md:py-36" aria-label="Galeri">
       <div className="mb-16 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
         <SectionHeading eyebrow="Galeri" title="Anlar, ışıkla yazılır." />
         <ButtonLink href="/galeri" variant="outline">

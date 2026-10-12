@@ -8,7 +8,7 @@ import { Preloader } from "./Preloader";
 const IntroContext = createContext<boolean>(true);
 export const useIntroDone = () => useContext(IntroContext);
 
-const KEY = "serenad:intro";
+const KEY = "konak:intro";
 
 export function Providers({ children }: { children: ReactNode }) {
   // Sunucu ve ilk hidrasyon: intro "bitmiş" varsayılır (içerik her zaman erişilebilir).

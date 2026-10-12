@@ -4,7 +4,7 @@
  * bileşiminden türetilen kararlı bir karma (hash) ile, her istekte aynı sonucu
  * veren gerçekçi bir doluluk haritası üretilir.
  */
-import { venues } from "./data";
+import { eventTypes } from "./data";
 
 export type Availability = "available" | "limited" | "booked" | "past";
 
@@ -33,9 +33,11 @@ export function seasonOf(month: number): DayAvailability["season"] {
 }
 
 const BASE_PRICE: Record<string, number> = {
-  "bogaz-salonu": 4200,
-  "kis-bahcesi": 3600,
-  teras: 3900,
+  dugun: 1450,
+  nisan: 1100,
+  kina: 1200,
+  matine: 950,
+  toplanti: 850,
 };
 
 export function dayAvailability(dateISO: string, venueSlug: string, today = new Date()): DayAvailability {
@@ -46,7 +48,7 @@ export function dayAvailability(dateISO: string, venueSlug: string, today = new 
   const weekend = dow === 5 || dow === 6;
   const season = seasonOf(m);
 
-  const base = BASE_PRICE[venueSlug] ?? 3800;
+  const base = BASE_PRICE[venueSlug] ?? 1200;
   const seasonMul = season === "high" ? 1.25 : season === "mid" ? 1.1 : 1;
   const weekendMul = weekend ? 1.2 : 1;
   const priceFrom = Math.round((base * seasonMul * weekendMul) / 50) * 50;
@@ -77,6 +79,6 @@ export function monthAvailability(year: number, month: number, venueSlug: string
   return out;
 }
 
-export function isVenueSlug(slug: string) {
-  return venues.some((v) => v.slug === slug);
+export function isEventSlug(slug: string) {
+  return eventTypes.some((v) => v.slug === slug);
 }

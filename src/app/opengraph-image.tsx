@@ -8,7 +8,7 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export default async function OG() {
-  return new ImageResponse(<OgCard title="Hayatınızın en güzel gecesi." subtitle="Düğün & Davet Salonu · Boğaz, İstanbul" />, size);
+  return new ImageResponse(<OgCard title="Hayatınızın en güzel günü." subtitle="Düğün Salonu · Ortahisar, Trabzon" />, size);
 }
 
 export function OgCard({ title, subtitle, index }: { title: string; subtitle: string; index?: string }) {
@@ -27,8 +27,8 @@ export function OgCard({ title, subtitle, index }: { title: string; subtitle: st
       }}
     >
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 22, letterSpacing: 8, color: "#d4b483" }}>
-        <span>SERENAD</span>
-        <span>{index ?? "EST. 2008"}</span>
+        <span>KONAK</span>
+        <span>{index ?? "TRABZON"}</span>
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
         <div style={{ fontSize: 96, lineHeight: 1, letterSpacing: -2, maxWidth: 1000 }}>{title}</div>
