@@ -69,7 +69,7 @@ export function Availability({ compact = false }: { compact?: boolean }) {
         <div className="mb-16 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <SectionHeading eyebrow="Tarih sorgula" title="Gününüz hâlâ boş mu?" />
           <p className="max-w-sm text-sm leading-relaxed text-tone-mute md:text-right">
-            Takvimden bir gün seçin; anlık uygunluğu ve başlangıç fiyatını görün, ardından talebinizi bırakın.
+            Takvimden bir gün seçin; anlık uygunluğu görün, ardından talebinizi bırakın.
           </p>
         </div>
       )}
@@ -190,10 +190,8 @@ export function Availability({ compact = false }: { compact?: boolean }) {
                     Durum
                   </span>
                   <span>
-                    <b className="mb-1 block font-display text-2xl normal-case tracking-normal text-tone">
-                      ₺{selected.priceFrom.toLocaleString("tr-TR")}
-                    </b>
-                    Kişi başı, başlangıç
+                    <b className="mb-1 block font-display text-2xl normal-case tracking-normal text-tone">{active.capacity} kişi</b>
+                    Kapasite · {active.duration}
                   </span>
                 </div>
               </motion.div>
@@ -205,7 +203,7 @@ export function Availability({ compact = false }: { compact?: boolean }) {
                 exit={{ opacity: 0 }}
                 className="rounded-sm border border-dashed border-tone-strong p-6 text-sm text-tone-mute"
               >
-                Takvimden uygun bir gün seçtiğinizde durum ve başlangıç fiyatı burada görünür.
+                Takvimden uygun bir gün seçtiğinizde uygunluk durumu burada görünür.
               </motion.div>
             )}
           </AnimatePresence>
@@ -293,11 +291,11 @@ function InquiryForm({ venue, date }: { venue: string; date: string }) {
           <input id="email" name="email" type="email" required autoComplete="email" placeholder="siz@ornek.com" className={inputCls} />
         </Field>
         <Field label="Kişi sayısı" name="guests" error={errors.guests}>
-          <input id="guests" name="guests" type="number" min={20} max={900} required placeholder="250" className={inputCls} />
+          <input id="guests" name="guests" type="number" min={20} max={600} required placeholder="250" className={inputCls} />
         </Field>
       </div>
       <Field label="Notunuz (isteğe bağlı)" name="message" error={errors.message}>
-        <textarea id="message" name="message" rows={2} placeholder="Nikâh + yemek, canlı müzik..." className={cn(inputCls, "resize-none")} />
+        <textarea id="message" name="message" rows={2} placeholder="Canlı müzik, dekor tercihi..." className={cn(inputCls, "resize-none")} />
       </Field>
 
       {errors.date && (

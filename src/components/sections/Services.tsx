@@ -17,7 +17,7 @@ export function Services() {
       <div className="container-x mb-16 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
         <SectionHeading eyebrow="Deneyim" title="Her detay, tek bir imzayla." />
         <p className="max-w-sm text-sm leading-relaxed text-tone-mute md:text-right">
-          Mutfaktan ışığa, çiçekten koordinasyona; hepsi tek çatı altında, tek bir ekip tarafından.
+          Işıktan çiçeğe, müzikten koordinasyona; hepsi tek çatı altında, tek bir ekip tarafından.
         </p>
       </div>
 

@@ -12,7 +12,7 @@ import { SITE } from "@/lib/utils";
 const HeroCanvas = dynamic(() => import("./HeroCanvas"), { ssr: false });
 
 const ease = [0.16, 1, 0.3, 1] as const;
-const HERO_SRC = photos.ballroom;
+const HERO_SRC = photos.silhouette;
 const WEBGL_SRC = `${HERO_SRC}&w=1920`;
 
 export function Hero() {
@@ -103,7 +103,7 @@ export function Hero() {
           <div className={`absolute inset-0 transition-opacity duration-[1500ms] ${glReady ? "opacity-0" : "opacity-100"}`}>
             <Image
               src={HERO_SRC}
-              alt="Konak Düğün Salonu, kristal avizeler altında kurulmuş davet masaları"
+              alt="Altın saatte bir çift, Konak Düğün Salonu"
               fill
               priority
               sizes="100vw"
@@ -147,7 +147,7 @@ export function Hero() {
           </span>
           Kaydır
         </span>
-        <span className="hidden md:block">500 kişiye kadar</span>
+        <span className="hidden md:block">600 kişiye kadar</span>
         <span className="hidden md:block">Düğün · Nişan · Kına · Matine · Toplantı</span>
         <span className="text-right">{SITE.city}</span>
       </motion.div>

@@ -9,9 +9,9 @@ import { SITE } from "@/lib/utils";
 import { photos, eventTypes } from "@/lib/data";
 
 const primary = [
-  { href: "/", label: "Ana Sayfa", n: "01", image: photos.ballroom },
-  { href: "/#etkinlikler", label: "Etkinlikler", n: "02", image: photos.stringLights },
-  { href: "/#deneyim", label: "Deneyim", n: "03", image: photos.plate },
+  { href: "/", label: "Ana Sayfa", n: "01", image: photos.kissBW },
+  { href: "/#etkinlikler", label: "Etkinlikler", n: "02", image: photos.silhouette },
+  { href: "/#deneyim", label: "Deneyim", n: "03", image: photos.goldRings },
   { href: "/galeri", label: "Galeri", n: "04", image: photos.kissBW },
   { href: "/rezervasyon", label: "Rezervasyon", n: "05", image: photos.silhouette },
 ];

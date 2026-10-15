@@ -15,7 +15,7 @@ export const inquirySchema = z.object({
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/, "Takvimden bir tarih seçin.")
     .refine((v) => !Number.isNaN(Date.parse(v)), "Geçersiz tarih."),
-  guests: z.coerce.number().int().min(20, "En az 20 kişi.").max(900, "En fazla 900 kişi."),
+  guests: z.coerce.number().int().min(20, "En az 20 kişi.").max(600, "En fazla 600 kişi."),
   message: z.string().trim().max(600, "Mesaj 600 karakteri aşamaz.").optional().or(z.literal("")),
   // Honeypot: insanlar doldurmaz.
   website: z.string().max(0).optional().or(z.literal("")),

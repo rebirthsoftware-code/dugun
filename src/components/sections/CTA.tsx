@@ -21,10 +21,10 @@ export function CTA() {
       <div className="absolute inset-0 bg-gradient-to-b from-ink via-ink/40 to-ink" />
       <div className="grain absolute inset-0" />
       <div className="container-x relative z-10 flex flex-col items-center py-32 text-center">
-        <span className="eyebrow mb-8 text-gold">Bir kahve, bir tur, bir hayal</span>
+        <span className="eyebrow mb-8 text-gold">Bir tur, bir sohbet, bir hayal</span>
         <SplitWords as="h2" text="Hikâyenizi birlikte yazalım." className="font-display type-lg text-ivory" />
         <p className="mt-8 max-w-lg text-pretty text-base leading-relaxed text-ivory/75">
-          Salonu gezmek, menüyü tatmak ve tarihinizi konuşmak için sizi Meydan’a bekliyoruz.
+          Salonu gezmek ve tarihinizi konuşmak için sizi Meydan’a bekliyoruz.
         </p>
         <div className="mt-12 flex flex-wrap justify-center gap-4">
           <ButtonLink href="/rezervasyon">Tarih Sorgula</ButtonLink>

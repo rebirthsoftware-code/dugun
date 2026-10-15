@@ -2,7 +2,6 @@ import { Hero } from "@/components/hero/Hero";
 import { Intro } from "@/components/sections/Intro";
 import { EventTypes } from "@/components/sections/EventTypes";
 import { Flow } from "@/components/sections/Flow";
-import { Gastronomy } from "@/components/sections/Gastronomy";
 import { Services } from "@/components/sections/Services";
 import { GalleryPreview } from "@/components/sections/Gallery";
 import { Testimonials } from "@/components/sections/Testimonials";
@@ -50,7 +49,6 @@ export default function HomePage() {
       <Intro />
       <EventTypes />
       <Flow />
-      <Gastronomy />
       <Services />
       <GalleryPreview />
       <Testimonials />

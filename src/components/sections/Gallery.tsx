@@ -17,7 +17,7 @@ export function GalleryPreview() {
 
   const cols = [
     { y: y1, items: [gallery[1], gallery[6], gallery[3]] },
-    { y: y2, items: [gallery[2], gallery[12], gallery[9]] },
+    { y: y2, items: [gallery[2], gallery[10], gallery[9]] },
     { y: y3, items: [gallery[5], gallery[4], gallery[7]] },
   ];
 

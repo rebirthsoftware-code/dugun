@@ -41,13 +41,13 @@ export function Intro() {
           </FadeIn>
           <SplitWords
             as="h2"
-            text="Bir düğün, iki ailenin ilk ortak hatırasıdır. Biz o hatırayı ışıkla, lezzetle ve zamanla işleriz."
+            text="Bir düğün, iki ailenin ilk ortak hatırasıdır. Biz o hatırayı ışıkla, müzikle ve zamanla işleriz."
             className="mt-8 font-display type-md text-balance leading-[1.05]"
           />
           <FadeIn delay={0.25}>
             <p className="mt-8 max-w-xl text-base leading-relaxed text-tone-mute md:text-lg">
               Trabzon Meydan’da, şehrin tam merkezinde; düğünden nişana, kınadan matineye ve kurumsal toplantıya her
-              etkinliğe ayrı bir sahne kuruyoruz. Tek mutfak, tek koordinatör ve sürpriz bırakmayan bir plan. Gecenin
+              etkinliğe ayrı bir sahne kuruyoruz. Tek ekip, tek koordinatör ve sürpriz bırakmayan bir plan. Gecenin
               sonunda konuklarınız yalnızca bir şeyi hatırlar: nasıl hissettiklerini.
             </p>
           </FadeIn>
