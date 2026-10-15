@@ -134,7 +134,7 @@ export function Menu({ onClose }: { onClose: () => void }) {
           transition={{ delay: 0.9 }}
           className="relative z-10 flex items-center justify-between border-t hairline pt-6 font-sans text-[11px] uppercase tracking-[0.25em] text-mute lg:col-span-2"
         >
-          <span>Trabzon · Ortahisar</span>
+          <span>Trabzon · Meydan</span>
           <a href={SITE.mapsHref} target="_blank" rel="noreferrer" className="hover:text-ivory">
             Haritada aç ↗
           </a>

@@ -24,7 +24,7 @@ export function CTA() {
         <span className="eyebrow mb-8 text-gold">Bir kahve, bir tur, bir hayal</span>
         <SplitWords as="h2" text="Hikâyenizi birlikte yazalım." className="font-display type-lg text-ivory" />
         <p className="mt-8 max-w-lg text-pretty text-base leading-relaxed text-ivory/75">
-          Salonu gezmek, menüyü tatmak ve tarihinizi konuşmak için sizi Ortahisar’a bekliyoruz.
+          Salonu gezmek, menüyü tatmak ve tarihinizi konuşmak için sizi Meydan’a bekliyoruz.
         </p>
         <div className="mt-12 flex flex-wrap justify-center gap-4">
           <ButtonLink href="/rezervasyon">Tarih Sorgula</ButtonLink>

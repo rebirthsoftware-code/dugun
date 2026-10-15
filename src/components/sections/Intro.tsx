@@ -46,7 +46,7 @@ export function Intro() {
           />
           <FadeIn delay={0.25}>
             <p className="mt-8 max-w-xl text-base leading-relaxed text-tone-mute md:text-lg">
-              Trabzon Ortahisar’da, şehrin merkezinde; düğünden nişana, kınadan matineye ve kurumsal toplantıya her
+              Trabzon Meydan’da, şehrin tam merkezinde; düğünden nişana, kınadan matineye ve kurumsal toplantıya her
               etkinliğe ayrı bir sahne kuruyoruz. Tek mutfak, tek koordinatör ve sürpriz bırakmayan bir plan. Gecenin
               sonunda konuklarınız yalnızca bir şeyi hatırlar: nasıl hissettiklerini.
             </p>

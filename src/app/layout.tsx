@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     template: `%s · ${SITE.name}`,
   },
   description: SITE.description,
-  keywords: ["Trabzon düğün salonu", "Ortahisar düğün salonu", "kına gecesi Trabzon", "nişan salonu Trabzon", "matine Trabzon", "toplantı salonu Trabzon", "Konak düğün salonu"],
+  keywords: ["Trabzon düğün salonu", "Trabzon Meydan düğün salonu", "kına gecesi Trabzon", "nişan salonu Trabzon", "matine Trabzon", "toplantı salonu Trabzon", "Konak düğün salonu"],
   openGraph: {
     type: "website",
     locale: "tr_TR",

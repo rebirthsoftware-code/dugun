@@ -71,7 +71,7 @@ export function Footer() {
 
       <div className="container-x flex flex-col gap-4 border-t hairline py-6 font-sans text-[11px] uppercase tracking-[0.22em] text-mute sm:flex-row sm:items-center sm:justify-between">
         <span>© <Year /> {SITE.fullName}</span>
-        <span>Ortahisar, Trabzon</span>
+        <span>Meydan, Trabzon</span>
       </div>
 
       <div

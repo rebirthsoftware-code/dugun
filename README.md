@@ -1,6 +1,6 @@
 # Konak Düğün Salonu — Trabzon
 
-Trabzon Ortahisar'daki Konak Düğün Salonu için tasarlanmış, Next.js 16'nın en yeni yeteneklerini sergileyen editoryal bir vitrin sitesi. Düğün, nişan, kına, matine ve toplantı organizasyonları.
+Trabzon Meydan'daki Konak Düğün Salonu için tasarlanmış, Next.js 16'nın en yeni yeteneklerini sergileyen editoryal bir vitrin sitesi. Düğün, nişan, kına, matine ve toplantı organizasyonları.
 
 ## Öne çıkanlar
 

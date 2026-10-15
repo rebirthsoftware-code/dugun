@@ -47,7 +47,7 @@ export function Hero() {
               transition={{ duration: 1, ease, delay: 0.3 }}
               className="eyebrow block"
             >
-              Düğün Salonu · Ortahisar, Trabzon
+              Düğün Salonu · Meydan, Trabzon
             </motion.span>
           </div>
           <h1 className="font-display type-xl text-ink">
@@ -73,7 +73,7 @@ export function Hero() {
             transition={{ duration: 1, ease, delay: 0.95 }}
             className="max-w-md text-pretty text-base leading-relaxed text-tone-mute md:text-lg"
           >
-            Trabzon’un kalbinde, Ortahisar’da. Düğün, nişan, kına, matine ve toplantılarınız için tek adres: Konak.
+            Trabzon’un kalbinde, Meydan’da. Düğün, nişan, kına, matine ve toplantılarınız için tek adres: Konak.
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -124,7 +124,7 @@ export function Hero() {
             className="absolute inset-x-5 bottom-5 flex items-end justify-between text-ivory md:inset-x-8 md:bottom-8"
           >
             <div>
-              <span className="eyebrow mb-2 block text-gold">Ortahisar · Trabzon</span>
+              <span className="eyebrow mb-2 block text-gold">Meydan · Trabzon</span>
               <span className="font-display text-3xl md:text-4xl">Konak Düğün Salonu</span>
             </div>
             <span className="hidden font-sans text-[10px] uppercase tracking-[0.3em] text-ivory/70 md:block">

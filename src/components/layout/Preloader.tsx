@@ -43,7 +43,7 @@ export function Preloader({ onDone }: { onDone: () => void }) {
           aria-hidden
         >
           <div className="flex items-center justify-between font-sans text-[10px] uppercase tracking-[0.35em] text-mute">
-            <span>Ortahisar · Trabzon</span>
+            <span>Meydan · Trabzon</span>
             <span>Düğün Salonu</span>
           </div>
 

@@ -8,7 +8,7 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export default async function OG() {
-  return new ImageResponse(<OgCard title="Hayatınızın en güzel günü." subtitle="Düğün Salonu · Ortahisar, Trabzon" />, size);
+  return new ImageResponse(<OgCard title="Hayatınızın en güzel günü." subtitle="Düğün Salonu · Meydan, Trabzon" />, size);
 }
 
 export function OgCard({ title, subtitle, index }: { title: string; subtitle: string; index?: string }) {

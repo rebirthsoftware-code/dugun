@@ -215,7 +215,7 @@ export const services: Service[] = [
     id: "ulasim",
     eyebrow: "Misafirperverlik",
     title: "Ulaşım & Otopark",
-    text: "Ortahisar'ın merkezinde, şehir içi ulaşıma yakın; özel otopark, vale ve konuk transferi seçenekleri.",
+    text: "Trabzon Meydan'da, şehir içi ulaşımın tam ortasında; özel otopark, vale ve konuk transferi seçenekleri.",
     image: photos.dinner,
   },
 ];
