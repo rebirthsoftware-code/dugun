@@ -18,7 +18,7 @@ export default async function CalendarPage({ searchParams }: PageProps<"/panel/t
   const next = m === 12 ? `${y + 1}-01` : `${y}-${String(m + 1).padStart(2, "0")}`;
   const key = `${y}-${String(m).padStart(2, "0")}`;
 
-  const occ = await getOccupancy();
+  const occ = await getOccupancy({ fresh: true });
   const monthRes = occ.reservations.filter((r) => r.date.startsWith(key) && r.status !== "cancelled").sort((a, b) => (a.date > b.date ? 1 : -1));
   const typeName = (slug: string) => eventTypes.find((e) => e.slug === slug)?.name ?? slug;
 

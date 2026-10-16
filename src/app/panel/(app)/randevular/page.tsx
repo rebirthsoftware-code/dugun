@@ -16,7 +16,7 @@ export default async function ReservationsPage({ searchParams }: PageProps<"/pan
   const sp = await searchParams;
   const durum = (typeof sp.durum === "string" ? sp.durum : "all") as ReservationStatus | "all";
   const q = typeof sp.q === "string" ? sp.q.trim().toLocaleLowerCase("tr") : "";
-  const all = await listReservations();
+  const all = await listReservations({ fresh: true });
   const list = all.filter((r) => (durum === "all" || r.status === durum) && (!q || `${r.name} ${r.phone} ${r.email} ${r.date}`.toLocaleLowerCase("tr").includes(q)));
   const typeName = (slug: string) => eventTypes.find((e) => e.slug === slug)?.name ?? slug;
 

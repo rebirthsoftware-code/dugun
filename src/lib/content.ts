@@ -1,5 +1,5 @@
 import { cache } from "react";
-import { dbGet, dbSet } from "./db";
+import { dbGet, dbUpdate } from "./db";
 import {
   eventTypes as defaultEventTypes,
   services as defaultServices,
@@ -144,14 +144,13 @@ export const getContent = cache(async (): Promise<SiteContent> => {
 });
 
 export async function saveContent(patch: Partial<SiteContent>) {
-  const stored = (await dbGet<Partial<SiteContent>>(KEY)) ?? {};
-  const next = { ...stored, ...patch, updatedAt: new Date().toISOString() };
-  await dbSet(KEY, next);
-  return next;
+  return dbUpdate<Partial<SiteContent>>(KEY, (stored) => ({ ...(stored ?? {}), ...patch, updatedAt: new Date().toISOString() }));
 }
 
 export async function resetSection<K extends keyof SiteContent>(key: K) {
-  const stored = (await dbGet<Partial<SiteContent>>(KEY)) ?? {};
-  delete stored[key];
-  await dbSet(KEY, { ...stored, updatedAt: new Date().toISOString() });
+  await dbUpdate<Partial<SiteContent>>(KEY, (stored) => {
+    const next = { ...(stored ?? {}) };
+    delete next[key];
+    return { ...next, updatedAt: new Date().toISOString() };
+  });
 }

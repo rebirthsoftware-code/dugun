@@ -11,7 +11,7 @@ function fmt(iso: string) {
 }
 
 export default async function PanelHome() {
-  const [reservations, blocked] = await Promise.all([listReservations(), listBlockedDates()]);
+  const [reservations, blocked] = await Promise.all([listReservations({ fresh: true }), listBlockedDates({ fresh: true })]);
   const now = new Date();
   const monthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
   const newCount = reservations.filter((r) => r.status === "new").length;

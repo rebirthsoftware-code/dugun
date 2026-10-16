@@ -16,7 +16,7 @@ const ghRepo =
 const ghBranch = process.env.DATA_GITHUB_BRANCH ?? "data";
 const ghDir = "data";
 const ghApi = process.env.DATA_GITHUB_API ?? "https://api.github.com";
-const GH_CACHE_TTL = 15_000; // ms; aynı sunucu örneğinde tekrar okumaları azaltır
+const GH_CACHE_TTL = 5_000; // ms; aynı sunucu örneğinde tekrar okumaları azaltır
 
 type GhEntry = { value: unknown; sha: string | null; at: number };
 const ghCache = new Map<string, GhEntry>();
@@ -69,11 +69,16 @@ async function ghEnsureBranch() {
   if (!create.ok && create.status !== 422) throw new Error(`Dal oluşturulamadı ${create.status}: ${await create.text()}`);
 }
 
-async function ghWrite(key: string, value: unknown) {
+/**
+ * Okuma-değiştir-yazma: her denemede dosya taze okunur, `updater` güncel değere uygulanır ve
+ * o anki sha ile yazılır. Eşzamanlı yazımda (409/422) baştan tekrar denenir; böylece kayıt ezilmez.
+ */
+async function ghWrite(key: string, updater: (current: unknown) => unknown) {
   await ghEnsureBranch();
-  const content = Buffer.from(JSON.stringify(value, null, 2) + "\n", "utf8").toString("base64");
-  for (let attempt = 0; attempt < 3; attempt++) {
-    const current = await ghRead(key, attempt > 0);
+  for (let attempt = 0; attempt < 5; attempt++) {
+    const current = await ghRead(key, true);
+    const value = updater(current.value);
+    const content = Buffer.from(JSON.stringify(value, null, 2) + "\n", "utf8").toString("base64");
     const res = await fetch(ghUrl(key), {
       method: "PUT",
       headers: ghHeaders({ "Content-Type": "application/json" }),
@@ -89,7 +94,10 @@ async function ghWrite(key: string, value: unknown) {
       ghCache.set(key, { value, sha: json.content.sha, at: Date.now() });
       return;
     }
-    if (res.status === 409 || res.status === 422) continue; // sha çakışması: yeniden oku ve dene
+    if (res.status === 409 || res.status === 422) {
+      await new Promise((r) => setTimeout(r, 150 * (attempt + 1)));
+      continue; // sha çakışması: taze oku ve tekrar uygula
+    }
     throw new Error(`GitHub yazma hatası ${res.status}: ${await res.text()}`);
   }
   throw new Error("GitHub yazma: eşzamanlı değişiklik nedeniyle kaydedilemedi, tekrar deneyin.");
@@ -110,14 +118,14 @@ export const dbConfigured = dbBackend !== "memory";
 export const dbDescription =
   dbBackend === "github" ? `GitHub · ${ghRepo} @ ${ghBranch}` : dbBackend === "redis" ? "Upstash Redis" : "Bellek (geçici)";
 
-export async function dbGet<T>(key: string): Promise<T | null> {
-  if (ghToken) return ((await ghRead(key)).value as T) ?? null;
+export async function dbGet<T>(key: string, opts: { fresh?: boolean } = {}): Promise<T | null> {
+  if (ghToken) return ((await ghRead(key, opts.fresh)).value as T) ?? null;
   if (redis) return (await redis.get<T>(key)) ?? null;
   return (mem.get(key) as T) ?? null;
 }
 
 export async function dbSet<T>(key: string, value: T): Promise<void> {
-  if (ghToken) return ghWrite(key, value);
+  if (ghToken) return ghWrite(key, () => value);
   if (redis) {
     await redis.set(key, value);
     return;
@@ -125,8 +133,20 @@ export async function dbSet<T>(key: string, value: T): Promise<void> {
   mem.set(key, value);
 }
 
+/** Atomik güncelleme: güncel değeri okur, `fn` uygular, yazar. Liste eklemeleri için bunu kullanın. */
+export async function dbUpdate<T>(key: string, fn: (current: T | null) => T): Promise<T> {
+  if (ghToken) {
+    let result!: T;
+    await ghWrite(key, (cur) => (result = fn((cur as T) ?? null)));
+    return result;
+  }
+  const next = fn(await dbGet<T>(key));
+  await dbSet(key, next);
+  return next;
+}
+
 export async function dbDel(key: string): Promise<void> {
-  if (ghToken) return ghWrite(key, null);
+  if (ghToken) return ghWrite(key, () => null);
   if (redis) {
     await redis.del(key);
     return;
