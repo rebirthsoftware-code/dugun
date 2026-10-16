@@ -1,0 +1,20 @@
+{
+  "site": {
+    "name": "Konak",
+    "fullName": "Konak Düğün Salonu",
+    "tagline": "Hayatınızın en güzel günü, Konak'ta.",
+    "description": "Trabzon Meydan'da düğün, nişan, kına, matine ve toplantı organizasyonları için şık, ferah ve profesyonel bir salon.",
+    "city": "Trabzon",
+    "district": "Meydan",
+    "phone": "0 (532) 321 61 78",
+    "phoneHref": "tel:+905323216178",
+    "whatsapp": "https://wa.me/905323216178?text=Merhaba%2C%20Konak%20D%C3%BC%C4%9F%C3%BCn%20Salonu%20i%C3%A7in%20bilgi%20almak%20istiyorum.",
+    "address": "Gazipaşa Mah. Cudibey Mektep Sok. No: 3/A",
+    "addressFull": "Gazipaşa Mah. Cudibey Mektep Sok. No: 3/A, Meydan / Trabzon",
+    "mapsHref": "https://maps.google.com/?q=Gazipa%C5%9Fa%20Mah.%20Cudibey%20Mektep%20Sok.%20No%3A3%2FA%20Meydan%20Trabzon",
+    "coords": "41°00′N 39°43′E",
+    "instagram": "https://www.instagram.com/konakdugunsalonutrabzon?vrfl=MWhvcW52bXFoY3d2cw==",
+    "email": ""
+  },
+  "updatedAt": "2026-10-16T10:19:38.091Z"
+}
