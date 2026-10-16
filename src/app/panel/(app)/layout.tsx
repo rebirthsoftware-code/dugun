@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CalendarDays, LayoutDashboard, ListChecks, PencilRuler, ExternalLink } from "lucide-react";
-import { dbConfigured } from "@/lib/db";
+import { dbConfigured, dbDescription } from "@/lib/db";
 import { logout } from "@/lib/panel-actions";
 import { PanelNav } from "@/components/panel/PanelNav";
 
@@ -47,11 +47,12 @@ export default function PanelLayout({ children }: LayoutProps<"/panel">) {
         </header>
         {!dbConfigured && (
           <div className="border-b border-rose/30 bg-rose/10 px-6 py-3 text-sm text-ink">
-            <b>Veritabanı bağlı değil.</b> Yaptığınız değişiklikler ve gelen talepler kalıcı olmaz. Vercel projesinde Storage → Upstash Redis
-            ekleyin; ortam değişkenleri otomatik tanımlanır.
+            <b>Veritabanı bağlı değil.</b> Yaptığınız değişiklikler ve gelen talepler kalıcı olmaz. Vercel ortam değişkenlerine
+            <code className="mx-1 rounded bg-ink/10 px-1">DATA_GITHUB_TOKEN</code> ekleyin (GitHub deposu veri olarak kullanılır) ya da Storage → Upstash Redis bağlayın.
           </div>
         )}
         <main className="flex-1 px-5 py-8 md:px-10">{children}</main>
+        <footer className="px-5 py-3 text-right font-sans text-[10px] uppercase tracking-[0.2em] text-tone-mute md:px-10">Veri: {dbDescription}</footer>
       </div>
       <span className="hidden">
         <LayoutDashboard /> <ListChecks /> <CalendarDays /> <PencilRuler />

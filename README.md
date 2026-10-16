@@ -28,11 +28,26 @@ Projenin **Settings → Environment Variables** bölümüne:
 | Değişken | Açıklama |
 | --- | --- |
 | `ADMIN_PASSWORD` | Panel giriş şifresi (zorunlu). |
+| `DATA_GITHUB_TOKEN` | GitHub deposunu veri olarak kullanmak için fine-grained token (Contents: Read and write). |
 | `ADMIN_SECRET` | İsteğe bağlı; oturum imzası için ayrı bir gizli anahtar. Verilmezse şifre kullanılır. |
 | `NEXT_PUBLIC_SITE_URL` | İsteğe bağlı; özel alan adı (örn. `https://konakdugun.com`). |
 
-Veritabanı için **Storage → Create Database → Upstash Redis** (ücretsiz plan yeterli). Vercel `KV_REST_API_URL` ve
-`KV_REST_API_TOKEN` değişkenlerini otomatik ekler. Veritabanı yokken panel çalışır ama veriler kalıcı olmaz; panelde uyarı görünür.
+### Veritabanı seçeneği A: GitHub deposu (önerilen, ek servis gerekmez)
+
+Panel verileri bu deponun `data` dalında JSON dosyaları olarak tutulur (`data/konak_content.json`, `data/konak_reservations.json`,
+`data/konak_blocked.json`). Her kayıt bir commit olur; `vercel.json` içindeki `ignoreCommand` sayesinde `data` dalı Vercel'de derleme tetiklemez.
+
+1. GitHub → Settings → Developer settings → Personal access tokens → **Fine-grained tokens** → Generate new token.
+   Repository access: yalnızca bu depo. Permissions → Repository permissions → **Contents: Read and write**.
+2. Vercel → Settings → Environment Variables → `DATA_GITHUB_TOKEN` = oluşturduğunuz token. (İsteğe bağlı: `DATA_GITHUB_REPO`
+   = `owner/repo`, `DATA_GITHUB_BRANCH` = `data`.)
+3. Redeploy. `data` dalı ilk kayıtta otomatik oluşturulur.
+
+### Veritabanı seçeneği B: Upstash Redis
+
+Vercel → Storage → Create Database → Upstash Redis. `KV_REST_API_URL` ve `KV_REST_API_TOKEN` otomatik eklenir.
+
+Veritabanı yokken panel çalışır ama veriler kalıcı olmaz; panelde uyarı görünür.
 
 ## Panel
 

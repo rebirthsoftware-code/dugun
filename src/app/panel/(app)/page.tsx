@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowUpRight, CalendarDays, Inbox, Lock, Database } from "lucide-react";
 import { listBlockedDates, listReservations, statusLabels } from "@/lib/reservations";
 import { eventTypes } from "@/lib/data";
-import { dbConfigured } from "@/lib/db";
+import { dbBackend } from "@/lib/db";
 import { ReservationRow } from "@/components/panel/ReservationRow";
 
 function fmt(iso: string) {
@@ -26,7 +26,7 @@ export default async function PanelHome() {
     { label: "Yeni talep", value: newCount, icon: Inbox, href: "/panel/randevular?durum=new" },
     { label: "Bu ay onaylı", value: confirmedThisMonth, icon: CalendarDays, href: "/panel/randevular?durum=confirmed" },
     { label: "Kapatılan gün", value: blocked.length, icon: Lock, href: "/panel/takvim" },
-    { label: "Veritabanı", value: dbConfigured ? "Bağlı" : "Yok", icon: Database, href: "/panel" },
+    { label: "Veritabanı", value: dbBackend === "github" ? "GitHub" : dbBackend === "redis" ? "Redis" : "Yok", icon: Database, href: "/panel" },
   ];
 
   return (

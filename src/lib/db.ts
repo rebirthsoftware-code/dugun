@@ -1,27 +1,123 @@
 /**
- * Veri katmanı: Upstash Redis (Vercel Marketplace) varsa onu, yoksa bellek içi bir
- * depoyu kullanır. Bellek içi depo yalnızca geliştirme/önizleme içindir; sunucu
- * yeniden başladığında sıfırlanır.
+ * Veri katmanı. Öncelik sırası:
+ *  1) GitHub deposu (DATA_GITHUB_TOKEN): veriler `data` dalındaki JSON dosyalarına yazılır.
+ *  2) Upstash Redis (KV_REST_API_URL / KV_REST_API_TOKEN).
+ *  3) Bellek içi depo: yalnızca geliştirme/önizleme; sunucu yeniden başlayınca sıfırlanır.
  */
 import { Redis } from "@upstash/redis";
 
-const url = process.env.KV_REST_API_URL ?? process.env.UPSTASH_REDIS_REST_URL;
-const token = process.env.KV_REST_API_TOKEN ?? process.env.UPSTASH_REDIS_REST_TOKEN;
+/* ------------------------------ GitHub ------------------------------ */
+const ghToken = process.env.DATA_GITHUB_TOKEN;
+const ghRepo =
+  process.env.DATA_GITHUB_REPO ??
+  (process.env.VERCEL_GIT_REPO_OWNER && process.env.VERCEL_GIT_REPO_SLUG
+    ? `${process.env.VERCEL_GIT_REPO_OWNER}/${process.env.VERCEL_GIT_REPO_SLUG}`
+    : "rebirthsoftware-code/dugun");
+const ghBranch = process.env.DATA_GITHUB_BRANCH ?? "data";
+const ghDir = "data";
+const ghApi = process.env.DATA_GITHUB_API ?? "https://api.github.com";
+const GH_CACHE_TTL = 15_000; // ms; aynı sunucu örneğinde tekrar okumaları azaltır
 
-export const dbConfigured = Boolean(url && token);
+type GhEntry = { value: unknown; sha: string | null; at: number };
+const ghCache = new Map<string, GhEntry>();
 
-const redis = dbConfigured ? new Redis({ url: url!, token: token! }) : null;
+function ghHeaders(extra: Record<string, string> = {}) {
+  return {
+    Authorization: `Bearer ${ghToken}`,
+    Accept: "application/vnd.github+json",
+    "X-GitHub-Api-Version": "2022-11-28",
+    "User-Agent": "konak-panel",
+    ...extra,
+  };
+}
+const ghPath = (key: string) => `${ghDir}/${key.replace(/[^a-z0-9_-]/gi, "_")}.json`;
+const ghUrl = (key: string) => `${ghApi}/repos/${ghRepo}/contents/${ghPath(key)}`;
 
-const memory = new Map<string, unknown>();
+async function ghRead(key: string, force = false): Promise<GhEntry> {
+  const cached = ghCache.get(key);
+  if (!force && cached && Date.now() - cached.at < GH_CACHE_TTL) return cached;
+  const res = await fetch(`${ghUrl(key)}?ref=${encodeURIComponent(ghBranch)}`, { headers: ghHeaders(), cache: "no-store" });
+  let entry: GhEntry;
+  if (res.status === 404) {
+    entry = { value: null, sha: null, at: Date.now() };
+  } else if (!res.ok) {
+    throw new Error(`GitHub okuma hatası ${res.status}: ${await res.text()}`);
+  } else {
+    const json = (await res.json()) as { sha: string; content: string; encoding: string };
+    const text = Buffer.from(json.content, "base64").toString("utf8");
+    entry = { value: text ? JSON.parse(text) : null, sha: json.sha, at: Date.now() };
+  }
+  ghCache.set(key, entry);
+  return entry;
+}
+
+/** `data` dalı yoksa varsayılan daldan oluşturur. */
+async function ghEnsureBranch() {
+  const ref = await fetch(`${ghApi}/repos/${ghRepo}/git/ref/heads/${encodeURIComponent(ghBranch)}`, { headers: ghHeaders(), cache: "no-store" });
+  if (ref.ok) return;
+  const repo = await fetch(`${ghApi}/repos/${ghRepo}`, { headers: ghHeaders(), cache: "no-store" });
+  if (!repo.ok) throw new Error(`GitHub depo bilgisi alınamadı ${repo.status}`);
+  const { default_branch } = (await repo.json()) as { default_branch: string };
+  const base = await fetch(`${ghApi}/repos/${ghRepo}/git/ref/heads/${encodeURIComponent(default_branch)}`, { headers: ghHeaders(), cache: "no-store" });
+  if (!base.ok) throw new Error(`Varsayılan dal okunamadı ${base.status}`);
+  const { object } = (await base.json()) as { object: { sha: string } };
+  const create = await fetch(`${ghApi}/repos/${ghRepo}/git/refs`, {
+    method: "POST",
+    headers: ghHeaders({ "Content-Type": "application/json" }),
+    body: JSON.stringify({ ref: `refs/heads/${ghBranch}`, sha: object.sha }),
+  });
+  if (!create.ok && create.status !== 422) throw new Error(`Dal oluşturulamadı ${create.status}: ${await create.text()}`);
+}
+
+async function ghWrite(key: string, value: unknown) {
+  await ghEnsureBranch();
+  const content = Buffer.from(JSON.stringify(value, null, 2) + "\n", "utf8").toString("base64");
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const current = await ghRead(key, attempt > 0);
+    const res = await fetch(ghUrl(key), {
+      method: "PUT",
+      headers: ghHeaders({ "Content-Type": "application/json" }),
+      body: JSON.stringify({
+        message: `panel: ${key} güncellendi`,
+        content,
+        branch: ghBranch,
+        ...(current.sha ? { sha: current.sha } : {}),
+      }),
+    });
+    if (res.ok) {
+      const json = (await res.json()) as { content: { sha: string } };
+      ghCache.set(key, { value, sha: json.content.sha, at: Date.now() });
+      return;
+    }
+    if (res.status === 409 || res.status === 422) continue; // sha çakışması: yeniden oku ve dene
+    throw new Error(`GitHub yazma hatası ${res.status}: ${await res.text()}`);
+  }
+  throw new Error("GitHub yazma: eşzamanlı değişiklik nedeniyle kaydedilemedi, tekrar deneyin.");
+}
+
+/* ------------------------------ Upstash ----------------------------- */
+const kvUrl = process.env.KV_REST_API_URL ?? process.env.UPSTASH_REDIS_REST_URL;
+const kvToken = process.env.KV_REST_API_TOKEN ?? process.env.UPSTASH_REDIS_REST_TOKEN;
+const redis = !ghToken && kvUrl && kvToken ? new Redis({ url: kvUrl, token: kvToken }) : null;
+
+/* ------------------------------ Bellek ------------------------------ */
 const g = globalThis as unknown as { __konakMemory?: Map<string, unknown> };
-const mem = g.__konakMemory ?? (g.__konakMemory = memory);
+const mem = g.__konakMemory ?? (g.__konakMemory = new Map<string, unknown>());
+
+/* ------------------------------ API --------------------------------- */
+export const dbBackend: "github" | "redis" | "memory" = ghToken ? "github" : redis ? "redis" : "memory";
+export const dbConfigured = dbBackend !== "memory";
+export const dbDescription =
+  dbBackend === "github" ? `GitHub · ${ghRepo} @ ${ghBranch}` : dbBackend === "redis" ? "Upstash Redis" : "Bellek (geçici)";
 
 export async function dbGet<T>(key: string): Promise<T | null> {
+  if (ghToken) return ((await ghRead(key)).value as T) ?? null;
   if (redis) return (await redis.get<T>(key)) ?? null;
   return (mem.get(key) as T) ?? null;
 }
 
 export async function dbSet<T>(key: string, value: T): Promise<void> {
+  if (ghToken) return ghWrite(key, value);
   if (redis) {
     await redis.set(key, value);
     return;
@@ -30,6 +126,7 @@ export async function dbSet<T>(key: string, value: T): Promise<void> {
 }
 
 export async function dbDel(key: string): Promise<void> {
+  if (ghToken) return ghWrite(key, null);
   if (redis) {
     await redis.del(key);
     return;
