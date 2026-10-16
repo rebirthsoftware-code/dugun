@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 type Obj = Record<string, unknown>;
 
 function ImagePreview({ src }: { src: string }) {
-  const ok = typeof src === "string" && /^https?:\/\//.test(src);
+  const ok = typeof src === "string" && (/^https?:\/\//.test(src) || src.startsWith("/"));
   if (!ok) return <div className="grid h-20 w-28 shrink-0 place-items-center rounded-md border border-dashed border-ink/20 text-[10px] text-tone-mute">önizleme</div>;
   return (
     <div className="relative h-20 w-28 shrink-0 overflow-hidden rounded-md border border-ink/10 bg-ink/5">
@@ -47,7 +47,7 @@ function FieldInput({ field, value, onChange }: { field: Field; value: unknown; 
     return (
       <div className="flex gap-3">
         <ImagePreview src={String(value ?? "")} />
-        <input type="url" value={String(value ?? "")} onChange={(e) => onChange(e.target.value)} placeholder="https://..." className={base} />
+        <input type="text" value={String(value ?? "")} onChange={(e) => onChange(e.target.value)} placeholder="https://... ya da /fotograf/dosya.jpg" className={base} />
       </div>
     );
   return <input type={field.type === "url" ? "url" : "text"} value={String(value ?? "")} onChange={(e) => onChange(e.target.value)} className={base} />;
