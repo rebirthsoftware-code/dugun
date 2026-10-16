@@ -5,6 +5,7 @@
  *  3) Bellek içi depo: yalnızca geliştirme/önizleme; sunucu yeniden başlayınca sıfırlanır.
  */
 import { Redis } from "@upstash/redis";
+import { revalidateTag } from "next/cache";
 
 /* ------------------------------ GitHub ------------------------------ */
 const ghToken = process.env.DATA_GITHUB_TOKEN;
@@ -33,22 +34,39 @@ function ghHeaders(extra: Record<string, string> = {}) {
 const ghPath = (key: string) => `${ghDir}/${key.replace(/[^a-z0-9_-]/gi, "_")}.json`;
 const ghUrl = (key: string) => `${ghApi}/repos/${ghRepo}/contents/${ghPath(key)}`;
 
+const tagOf = (key: string) => `gh:${key}`;
+
+/**
+ * Okuma. `force=false` iken Next.js'in paylaşımlı veri önbelleği (60 sn, etiketli) kullanılır;
+ * böylece tüm sunucu örnekleri GitHub'a tek istek atar ve saatlik API sınırı aşılmaz.
+ * Yazımlar etiketi geçersiz kılar. Hata olursa son bilinen değer ya da varsayılan (null) döner;
+ * site asla GitHub yüzünden çökmez. `force=true` (panel, yazım) her zaman taze okur ve hatayı iletir.
+ */
 async function ghRead(key: string, force = false): Promise<GhEntry> {
   const cached = ghCache.get(key);
   if (!force && cached && Date.now() - cached.at < GH_CACHE_TTL) return cached;
-  const res = await fetch(`${ghUrl(key)}?ref=${encodeURIComponent(ghBranch)}`, { headers: ghHeaders(), cache: "no-store" });
-  let entry: GhEntry;
-  if (res.status === 404) {
-    entry = { value: null, sha: null, at: Date.now() };
-  } else if (!res.ok) {
-    throw new Error(`GitHub okuma hatası ${res.status}: ${await res.text()}`);
-  } else {
-    const json = (await res.json()) as { sha: string; content: string; encoding: string };
-    const text = Buffer.from(json.content, "base64").toString("utf8");
-    entry = { value: text ? JSON.parse(text) : null, sha: json.sha, at: Date.now() };
+  try {
+    const res = await fetch(`${ghUrl(key)}?ref=${encodeURIComponent(ghBranch)}`, {
+      headers: ghHeaders(),
+      ...(force ? { cache: "no-store" as const } : { next: { revalidate: 60, tags: [tagOf(key)] } }),
+    });
+    let entry: GhEntry;
+    if (res.status === 404) {
+      entry = { value: null, sha: null, at: Date.now() };
+    } else if (!res.ok) {
+      throw new Error(`GitHub okuma hatası ${res.status}: ${(await res.text()).slice(0, 200)}`);
+    } else {
+      const json = (await res.json()) as { sha: string; content: string; encoding: string };
+      const text = Buffer.from(json.content, "base64").toString("utf8");
+      entry = { value: text ? JSON.parse(text) : null, sha: json.sha, at: Date.now() };
+    }
+    ghCache.set(key, entry);
+    return entry;
+  } catch (err) {
+    if (force) throw err;
+    console.error("[db] GitHub okunamadı, son bilinen değer kullanılıyor:", err instanceof Error ? err.message : err);
+    return cached ?? { value: null, sha: null, at: 0 };
   }
-  ghCache.set(key, entry);
-  return entry;
 }
 
 /** `data` dalı yoksa varsayılan daldan oluşturur. */
@@ -92,6 +110,11 @@ async function ghWrite(key: string, updater: (current: unknown) => unknown) {
     if (res.ok) {
       const json = (await res.json()) as { content: { sha: string } };
       ghCache.set(key, { value, sha: json.content.sha, at: Date.now() });
+      try {
+        revalidateTag(tagOf(key), "max");
+      } catch {
+        /* server action dışında çağrıldıysa yok say */
+      }
       return;
     }
     if (res.status === 409 || res.status === 422) {

@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { Loader2, MessageCircle, Phone, Trash2, Mail } from "lucide-react";
 import { removeReservation, saveReservationNote, setReservationStatus } from "@/lib/panel-actions";
-import { statusLabels, type Reservation, type ReservationStatus } from "@/lib/reservations";
+import { statusLabels, type Reservation, type ReservationStatus } from "@/lib/reservation-types";
 import { cn } from "@/lib/utils";
 
 const statusTone: Record<ReservationStatus, string> = {
