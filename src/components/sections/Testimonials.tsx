@@ -3,12 +3,12 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { testimonials } from "@/lib/data";
+import type { Testimonial } from "@/lib/content";
 import { FadeIn } from "@/components/ui/Reveal";
 
 const DURATION = 7000;
 
-export function Testimonials() {
+export function Testimonials({ testimonials }: { testimonials: Testimonial[] }) {
   const [i, setI] = useState(0);
   const [paused, setPaused] = useState(false);
 
@@ -16,7 +16,7 @@ export function Testimonials() {
     if (paused) return;
     const id = setTimeout(() => setI((v) => (v + 1) % testimonials.length), DURATION);
     return () => clearTimeout(id);
-  }, [i, paused]);
+  }, [i, paused, testimonials.length]);
 
   const t = testimonials[i];
 

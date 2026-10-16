@@ -1,13 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
-import { ViewTransition } from "react";
-import { Providers } from "@/components/layout/Providers";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
-import { SITE } from "@/lib/utils";
+import { getContent } from "@/lib/content";
 import "./globals.css";
 
-// Fontlar depoda yerel olarak tutulur: derleme ağ erişimine bağımlı değildir ve CI'da deterministiktir.
+// Fontlar depoda yerel olarak tutulur: derleme ağ erişimine bağımlı değildir.
 const cormorant = localFont({
   variable: "--font-cormorant",
   display: "swap",
@@ -23,42 +19,32 @@ const manrope = localFont({
   src: [{ path: "./fonts/Manrope.woff2", weight: "200 800", style: "normal" }],
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(SITE.url),
-  title: {
-    default: `${SITE.fullName} · Trabzon`,
-    template: `%s · ${SITE.name}`,
-  },
-  description: SITE.description,
-  keywords: ["Trabzon düğün salonu", "Trabzon Meydan düğün salonu", "kına gecesi Trabzon", "nişan salonu Trabzon", "matine Trabzon", "toplantı salonu Trabzon", "Konak düğün salonu"],
-  openGraph: {
-    type: "website",
-    locale: "tr_TR",
-    siteName: SITE.fullName,
-    title: `${SITE.name} · ${SITE.tagline}`,
-    description: SITE.description,
-  },
-  twitter: { card: "summary_large_image" },
-  robots: { index: true, follow: true },
-};
+// İçerik panelden yönetildiği için sayfalar istek anında üretilir.
+export const dynamic = "force-dynamic";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { site } = await getContent();
+  const base = process.env.NEXT_PUBLIC_SITE_URL ?? (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "https://dugun-livid.vercel.app");
+  return {
+    metadataBase: new URL(base),
+    title: { default: `${site.fullName} · ${site.city}`, template: `%s · ${site.name}` },
+    description: site.description,
+    keywords: [`${site.city} düğün salonu`, `${site.district} düğün salonu`, `kına gecesi ${site.city}`, `nişan salonu ${site.city}`, `matine ${site.city}`, `toplantı salonu ${site.city}`, `${site.name} düğün salonu`],
+    openGraph: { type: "website", locale: "tr_TR", siteName: site.fullName, title: `${site.name} · ${site.tagline}`, description: site.description },
+    twitter: { card: "summary_large_image" },
+    robots: { index: true, follow: true },
+  };
+}
 
 export const viewport: Viewport = {
-  themeColor: "#0b0a0a",
-  colorScheme: "dark",
+  themeColor: "#fbfaf7",
+  colorScheme: "light",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="tr" className={`${cormorant.variable} ${manrope.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">
-        <Providers>
-          <Header />
-          <ViewTransition default="slide">
-            <main className="flex-1">{children}</main>
-          </ViewTransition>
-          <Footer />
-        </Providers>
-      </body>
+      <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
 }

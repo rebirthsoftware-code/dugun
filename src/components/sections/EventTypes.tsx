@@ -5,12 +5,12 @@ import Link from "next/link";
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import { ArrowUpRight } from "lucide-react";
-import { eventTypes, type EventType } from "@/lib/data";
+import type { EventType } from "@/lib/data";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { FadeIn, ClipReveal } from "@/components/ui/Reveal";
 import { cn } from "@/lib/utils";
 
-export function EventTypes() {
+export function EventTypes({ eventTypes }: { eventTypes: EventType[] }) {
   return (
     <section id="etkinlikler" className="surface-white relative scroll-mt-20 py-24 md:py-36" aria-label="Etkinlikler">
       <div className="container-x mb-20 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">

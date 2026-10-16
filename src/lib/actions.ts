@@ -1,14 +1,11 @@
-/**
- * Talep ve uygunluk mantığı.
- *
- * Site GitHub Pages'te statik olarak yayınlandığı için bu fonksiyonlar tarayıcıda çalışır.
- * Bir Node.js ortamına (Vercel vb.) taşındığında dosyanın başına "use server" eklenerek
- * aynı imzayla Server Action'a dönüştürülebilir; bileşen tarafında değişiklik gerekmez.
- */
+"use server";
+
 import { z } from "zod";
+import { revalidatePath } from "next/cache";
 import { inquirySchema } from "./schema";
 import { dayAvailability, isEventSlug, monthAvailability, type DayAvailability } from "./availability";
 import { getEventType } from "./data";
+import { addReservation, getOccupancy } from "./reservations";
 
 export type InquiryState =
   | { status: "idle" }
@@ -19,7 +16,7 @@ export type InquiryState =
       summary: { venue: string; date: string; guests: number; name: string };
     };
 
-/** Form gönderimini doğrular ve "talep kaydı" oluşturur. */
+/** Form gönderimini doğrular ve randevu talebini kaydeder. */
 export async function submitInquiry(_prev: InquiryState, formData: FormData): Promise<InquiryState> {
   const raw = Object.fromEntries(formData.entries());
   const parsed = inquirySchema.safeParse(raw);
@@ -35,59 +32,36 @@ export async function submitInquiry(_prev: InquiryState, formData: FormData): Pr
 
   const data = parsed.data;
   if (data.website) {
-    // Bot tuzağına takıldı; sessizce "başarılı" dön.
-    return {
-      status: "success",
-      reference: "SRN-0000",
-      summary: { venue: "", date: data.date, guests: data.guests, name: data.name },
-    };
+    // Bot tuzağı: sessizce "başarılı" dön.
+    return { status: "success", reference: "KNK-0000", summary: { venue: "", date: data.date, guests: data.guests, name: data.name } };
   }
 
-  const availability = dayAvailability(data.date, data.venue);
+  const occupancy = await getOccupancy();
+  const availability = dayAvailability(data.date, occupancy);
   if (availability.status === "booked" || availability.status === "past") {
     return {
       status: "error",
-      message: "Seçtiğiniz tarih bu salon için uygun değil. Lütfen takvimden başka bir gün seçin.",
+      message: "Seçtiğiniz tarih uygun değil. Lütfen takvimden başka bir gün seçin.",
       fieldErrors: { date: "Bu tarih dolu." },
     };
   }
 
-  // Entegrasyon noktası: NEXT_PUBLIC_INQUIRY_ENDPOINT tanımlıysa (örn. Formspree / Web3Forms)
-  // talep oraya iletilir; tanımlı değilse demo amaçlı gecikme simüle edilir.
-  const endpoint = process.env.NEXT_PUBLIC_INQUIRY_ENDPOINT;
-  if (endpoint) {
-    try {
-      const res = await fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({ ...data, website: undefined }),
-      });
-      if (!res.ok) throw new Error(String(res.status));
-    } catch {
-      return {
-        status: "error",
-        message: "Talebiniz iletilemedi. Lütfen bizi telefonla arayın ya da daha sonra tekrar deneyin.",
-        fieldErrors: {},
-      };
-    }
-  } else {
-    await new Promise((r) => setTimeout(r, 900));
-  }
+  const saved = await addReservation({
+    name: data.name,
+    phone: data.phone,
+    email: data.email,
+    eventType: data.venue,
+    date: data.date,
+    guests: data.guests,
+    message: data.message || undefined,
+  });
 
-  const reference =
-    "SRN-" +
-    Math.abs(
-      [...`${data.email}${data.date}${data.venue}`].reduce((h, c) => (h * 31 + c.charCodeAt(0)) | 0, 7),
-    )
-      .toString(36)
-      .toUpperCase()
-      .slice(0, 6);
-
-  console.info("[inquiry]", { reference, ...data, message: undefined });
+  revalidatePath("/panel");
+  revalidatePath("/panel/randevular");
 
   return {
     status: "success",
-    reference,
+    reference: saved.id,
     summary: {
       venue: getEventType(data.venue)?.name ?? data.venue,
       date: data.date,
@@ -97,14 +71,11 @@ export async function submitInquiry(_prev: InquiryState, formData: FormData): Pr
   };
 }
 
-/** Takvim bileşeni için aylık uygunluk haritası (Server Function). */
-export async function getMonthAvailability(
-  year: number,
-  month: number,
-  venue: string,
-): Promise<DayAvailability[]> {
+/** Takvim bileşeni için aylık uygunluk haritası. */
+export async function getMonthAvailability(year: number, month: number, venue: string): Promise<DayAvailability[]> {
   if (!Number.isInteger(year) || !Number.isInteger(month) || month < 1 || month > 12 || !isEventSlug(venue)) {
     return [];
   }
-  return monthAvailability(year, month, venue);
+  const occupancy = await getOccupancy();
+  return monthAvailability(year, month, occupancy);
 }

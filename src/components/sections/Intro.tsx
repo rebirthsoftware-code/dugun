@@ -3,11 +3,11 @@
 import Image from "next/image";
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
-import { photos, stats } from "@/lib/data";
+import type { IntroContent, Stat } from "@/lib/content";
 import { FadeIn, SplitWords, ClipReveal } from "@/components/ui/Reveal";
 import { Counter } from "./Numbers";
 
-export function Intro() {
+export function Intro({ intro, stats }: { intro: IntroContent; stats: Stat[] }) {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const imgY = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"]);
@@ -19,8 +19,8 @@ export function Intro() {
           <div className="relative aspect-[3/4] overflow-hidden">
             <motion.div style={{ y: imgY }} className="absolute inset-[-10%_0]">
               <Image
-                src={photos.kissBW}
-                alt="Duvak altında ilk öpücük, siyah-beyaz"
+                src={intro.image}
+                alt={intro.imageCaption}
                 fill
                 sizes="(min-width: 1024px) 42vw, 100vw"
                 className="object-cover grayscale"
@@ -28,8 +28,8 @@ export function Intro() {
             </motion.div>
           </div>
           <FadeIn delay={0.4} className="mt-4 flex items-center justify-between font-sans text-[10px] uppercase tracking-[0.3em] text-tone-mute">
-            <span>Büşra & Emre · Eylül 2025</span>
-            <span>Konak · Düğün</span>
+            <span>{intro.imageCaption}</span>
+            <span>{intro.imageCaptionRight}</span>
           </FadeIn>
         </ClipReveal>
 
@@ -41,15 +41,11 @@ export function Intro() {
           </FadeIn>
           <SplitWords
             as="h2"
-            text="Bir düğün, iki ailenin ilk ortak hatırasıdır. Biz o hatırayı ışıkla, müzikle ve zamanla işleriz."
+            text={intro.heading}
             className="mt-8 font-display type-md text-balance leading-[1.05]"
           />
           <FadeIn delay={0.25}>
-            <p className="mt-8 max-w-xl text-base leading-relaxed text-tone-mute md:text-lg">
-              Trabzon Meydan’da, şehrin tam merkezinde; düğünden nişana, kınadan matineye ve kurumsal toplantıya her
-              etkinliğe ayrı bir sahne kuruyoruz. Tek ekip, tek koordinatör ve sürpriz bırakmayan bir plan. Gecenin
-              sonunda konuklarınız yalnızca bir şeyi hatırlar: nasıl hissettiklerini.
-            </p>
+            <p className="mt-8 max-w-xl text-base leading-relaxed text-tone-mute md:text-lg">{intro.text}</p>
           </FadeIn>
 
           <dl className="mt-14 grid grid-cols-2 gap-x-8 gap-y-10 border-t border-tone pt-10 md:grid-cols-4">

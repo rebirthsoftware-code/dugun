@@ -7,8 +7,8 @@ Trabzon Meydan'daki Konak Düğün Salonu için tasarlanmış, Next.js 16'nın e
 - **WebGL ipek hero** — React Three Fiber üzerinde özel GLSL (domain-warped fBm) shader; fareye tepki verir, perde açılışıyla senkron.
 - **Sinematik hareket** — Motion ile kelime kelime maskeli başlıklar, scroll'a bağlı manifesto, yatay "salon yürüyüşü", üst üste yapışan deneyim kartları, paralaks galeri.
 - **Lenis** smooth scroll, manyetik butonlar, özel imleç, tam ekran menü, sayaçlı preloader.
-- **Tarih sorgulama** — deterministik uygunluk motoru takvimi doldurur; form `useActionState` + Zod ile doğrulanır ve referans numarası döner. Node.js ortamında dosyanın başına `"use server"` eklenerek aynı imzayla Server Action'a dönüşür.
-- **Next.js 16** — App Router, statik dışa aktarım (`output: "export"`), `generateStaticParams`, `ViewTransition`, `next/font`, `next/image` (Unsplash CDN loader), derleme anında üretilen OG görselleri (`ImageResponse`), `sitemap`/`robots`/`manifest`, JSON-LD (EventVenue + FAQPage).
+- **Randevu sistemi** — takvim gerçek doluluk verisinden beslenir (onaylı randevular + kapatılan günler); form `useActionState` + Zod ile doğrulanan bir Server Action'a gider ve talep panele düşer.
+- **Next.js 16** — App Router, Server Actions, `proxy.ts` ile korunan yönetim paneli, Upstash Redis veri katmanı, `ViewTransition`, `next/font`, `next/image`, dinamik OG görselleri (`ImageResponse`), `sitemap`/`robots`/`manifest`, JSON-LD (EventVenue + FAQPage).
 - **Tailwind CSS v4** tasarım tokenları, `prefers-reduced-motion` desteği, erişilebilir etkileşimler.
 
 ## Teknoloji
@@ -17,46 +17,66 @@ Next.js 16 · React 19 · TypeScript · Tailwind CSS 4 · Motion · Lenis · thr
 
 ## Canlı
 
-GitHub Pages: **https://rebirthsoftware-code.github.io/dugun/**
+Vercel: **https://dugun-livid.vercel.app** · Yönetim paneli: **https://dugun-livid.vercel.app/panel**
 
-Her push'ta `.github/workflows/deploy.yml` siteyi statik olarak derler ve Pages'e yayınlar.
+Her push'ta Vercel otomatik dağıtır.
+
+## Kurulum (Vercel)
+
+Projenin **Settings → Environment Variables** bölümüne:
+
+| Değişken | Açıklama |
+| --- | --- |
+| `ADMIN_PASSWORD` | Panel giriş şifresi (zorunlu). |
+| `ADMIN_SECRET` | İsteğe bağlı; oturum imzası için ayrı bir gizli anahtar. Verilmezse şifre kullanılır. |
+| `NEXT_PUBLIC_SITE_URL` | İsteğe bağlı; özel alan adı (örn. `https://konakdugun.com`). |
+
+Veritabanı için **Storage → Create Database → Upstash Redis** (ücretsiz plan yeterli). Vercel `KV_REST_API_URL` ve
+`KV_REST_API_TOKEN` değişkenlerini otomatik ekler. Veritabanı yokken panel çalışır ama veriler kalıcı olmaz; panelde uyarı görünür.
+
+## Panel
+
+- **Özet**: yeni talepler, bu ay onaylı etkinlikler, kapatılan günler.
+- **Randevular**: siteden gelen talepler; durum (Yeni → Görüşüldü → Onaylandı / İptal), not, tek tıkla arama, WhatsApp ve e-posta.
+  Onaylı randevunun günü sitede otomatik "dolu", görüşülen talep "son yer" olarak görünür.
+- **Takvim**: aylık görünüm; bir güne tıklayarak siteden rezervasyona kapatma/açma.
+- **Site içeriği**: iletişim, hero, tanıtım, sayılar, etkinlikler, hizmetler, günün akışı, galeri, yorumlar, SSS ve davet bloğu.
+  Görseller https bağlantısı olarak girilir (GitHub raw, Vercel Blob vb.); kaydedince anında yayınlanır. Her bölüm için "Varsayılan" düğmesi vardır.
 
 ## Çalıştırma
 
 ```bash
 pnpm install
-pnpm dev            # http://localhost:3000
-pnpm build          # statik çıktı: out/
-pnpm build:pages    # /dugun ön ekiyle (GitHub Pages proje sitesi)
-pnpm preview        # out/ klasörünü yerelde sunar
+ADMIN_PASSWORD=gizli pnpm dev   # http://localhost:3000 · panel: /panel
+pnpm build && pnpm start
 pnpm lint
 ```
-
-Özel alan adında yayınlanacaksa `NEXT_PUBLIC_BASE_PATH` boş bırakılır; workflow bunu Pages ayarından otomatik alır.
 
 ## Yapı
 
 ```
 src/
   app/                 # rotalar, metadata, OG görselleri
-    etkinlikler/[slug]/ # düğün, nişan, kına, matine, toplantı sayfaları
-    galeri/            # lightbox'lı galeri
-    rezervasyon/       # takvim + talep formu
+    (site)/            # herkese açık sayfalar (ana sayfa, etkinlikler, galeri, rezervasyon)
+    panel/             # yönetim paneli (giriş, özet, randevular, takvim, içerik)
   components/
     hero/              # SilkCanvas (GLSL) + Hero
     layout/            # Header, Menu, Footer, Preloader, Providers
     sections/          # Manifesto, Venues, Experience, Gallery, Availability, FAQ...
     ui/                # Reveal, Magnetic, Cursor, Button, Marquee
   lib/
-    data.ts            # etkinlik türleri, hizmetler, menü, galeri, SSS
-    availability.ts    # deterministik uygunluk motoru
-    actions.ts         # Server Actions (talep + uygunluk)
+    data.ts            # varsayılan içerik (panelden değiştirilebilir)
+    content.ts         # içerik katmanı: varsayılan + veritabanı birleşimi
+    reservations.ts    # randevu talepleri ve kapatılan günler
+    availability.ts    # doluluk → takvim durumu
+    db.ts              # Upstash Redis / bellek içi depo
+    auth.ts, proxy.ts  # panel oturumu ve koruma
+    actions.ts         # site Server Actions · panel-actions.ts: panel Server Actions
     schema.ts          # Zod şemaları
 ```
 
 ## Üretime alırken
 
 - `src/lib/utils.ts` içindeki `SITE` sabitleri (telefon, adres, WhatsApp) Konak'ın bilgileriyle doludur; alan adı bağlanınca `url` alanını güncelleyin.
-- Kapasite, süre ve fiyat değerleri `src/lib/data.ts` ve `src/lib/availability.ts` içinde yer tutucudur; salonun gerçek değerleriyle güncelleyin.
-- Talep formunu gerçek bir kutuya bağlamak için `NEXT_PUBLIC_INQUIRY_ENDPOINT` değişkenine bir Formspree / Web3Forms adresi verin (workflow'da repo secret olarak tanımlanabilir).
+- Kapasite, süre, metin ve görseller panelden güncellenir; `src/lib/data.ts` yalnızca varsayılanları tutar.
 - Görseller Unsplash'tan gelir; müşterinin kendi fotoğraflarını `src/lib/data.ts` üzerinden bağlayın.

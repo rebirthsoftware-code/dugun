@@ -6,16 +6,15 @@ import { useCallback, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import { useIntroDone } from "@/components/layout/Providers";
 import { ButtonLink } from "@/components/ui/Button";
-import { photos } from "@/lib/data";
-import { SITE } from "@/lib/utils";
+import type { HeroContent, SiteInfo } from "@/lib/content";
 
 const HeroCanvas = dynamic(() => import("./HeroCanvas"), { ssr: false });
 
 const ease = [0.16, 1, 0.3, 1] as const;
-const HERO_SRC = photos.silhouette;
-const WEBGL_SRC = `${HERO_SRC}&w=1920`;
 
-export function Hero() {
+export function Hero({ hero, site, capacity }: { hero: HeroContent; site: SiteInfo; capacity: number }) {
+  const HERO_SRC = hero.image;
+  const WEBGL_SRC = HERO_SRC.includes("images.unsplash.com") ? `${HERO_SRC}${HERO_SRC.includes("?") ? "&" : "?"}w=1920` : HERO_SRC;
   const intro = useIntroDone();
   const [glReady, setGlReady] = useState(false);
   const [canvasEnabled, setCanvasEnabled] = useState(true);
@@ -27,7 +26,7 @@ export function Hero() {
   const textOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
 
   const onReady = useCallback(() => setGlReady(true), []);
-  const lines = ["Hayatınızın", "en güzel", "günü."];
+  const lines = hero.lines;
 
   return (
     <section ref={ref} className="surface-white relative overflow-hidden pt-[calc(var(--header-h)+2.5rem)] md:pt-[calc(var(--header-h)+4rem)]" aria-label="Giriş">
@@ -47,7 +46,7 @@ export function Hero() {
               transition={{ duration: 1, ease, delay: 0.3 }}
               className="eyebrow block"
             >
-              Düğün Salonu · Meydan, Trabzon
+              {hero.eyebrow}
             </motion.span>
           </div>
           <h1 className="font-display type-xl text-ink">
@@ -73,7 +72,7 @@ export function Hero() {
             transition={{ duration: 1, ease, delay: 0.95 }}
             className="max-w-md text-pretty text-base leading-relaxed text-tone-mute md:text-lg"
           >
-            Trabzon’un kalbinde, Meydan’da. Düğün, nişan, kına, matine ve toplantılarınız için tek adres: Konak.
+            {hero.text}
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -103,7 +102,7 @@ export function Hero() {
           <div className={`absolute inset-0 transition-opacity duration-[1500ms] ${glReady ? "opacity-0" : "opacity-100"}`}>
             <Image
               src={HERO_SRC}
-              alt="Altın saatte bir çift, Konak Düğün Salonu"
+              alt={hero.imageAlt}
               fill
               priority
               sizes="100vw"
@@ -113,7 +112,7 @@ export function Hero() {
           </div>
           {canvasEnabled && (
             <div className={`absolute inset-0 transition-opacity duration-[1500ms] ${glReady ? "opacity-100" : "opacity-0"}`}>
-              <HeroCanvas src={WEBGL_SRC} intro={intro} onReady={onReady} />
+              <HeroCanvas key={WEBGL_SRC} src={WEBGL_SRC} intro={intro} onReady={onReady} />
             </div>
           )}
           <div className="grain pointer-events-none absolute inset-0" />
@@ -124,11 +123,11 @@ export function Hero() {
             className="absolute inset-x-5 bottom-5 flex items-end justify-between text-ivory md:inset-x-8 md:bottom-8"
           >
             <div>
-              <span className="eyebrow mb-2 block text-gold">Meydan · Trabzon</span>
-              <span className="font-display text-3xl md:text-4xl">Konak Düğün Salonu</span>
+              <span className="eyebrow mb-2 block text-gold">{hero.captionSub}</span>
+              <span className="font-display text-3xl md:text-4xl">{hero.caption}</span>
             </div>
             <span className="hidden font-sans text-[10px] uppercase tracking-[0.3em] text-ivory/70 md:block">
-              {SITE.coords}
+              {site.coords}
             </span>
           </motion.div>
         </motion.div>
@@ -147,9 +146,9 @@ export function Hero() {
           </span>
           Kaydır
         </span>
-        <span className="hidden md:block">600 kişiye kadar</span>
+        <span className="hidden md:block">{capacity} kişiye kadar</span>
         <span className="hidden md:block">Düğün · Nişan · Kına · Matine · Toplantı</span>
-        <span className="text-right">{SITE.city}</span>
+        <span className="text-right">{site.city}</span>
       </motion.div>
     </section>
   );

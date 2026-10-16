@@ -3,13 +3,13 @@
 import Image from "next/image";
 import { useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { services } from "@/lib/data";
+import type { Service } from "@/lib/data";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { FadeIn } from "@/components/ui/Reveal";
 import { cn } from "@/lib/utils";
 
 /** Hizmet listesi: hover/odak ile sağdaki yapışkan görsel değişir. Mobilde her satır kendi görselini açar. */
-export function Services() {
+export function Services({ services }: { services: Service[] }) {
   const [active, setActive] = useState(0);
 
   return (

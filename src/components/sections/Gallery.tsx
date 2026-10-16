@@ -3,22 +3,23 @@
 import { useRef } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "motion/react";
-import { gallery } from "@/lib/data";
+import type { GalleryItem } from "@/lib/content";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ButtonLink } from "@/components/ui/Button";
 
 /** Ana sayfa galeri önizlemesi: üç sütun, farklı hızlarda paralaks. */
-export function GalleryPreview() {
+export function GalleryPreview({ gallery }: { gallery: GalleryItem[] }) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const y1 = useTransform(scrollYProgress, [0, 1], [0, -120]);
   const y2 = useTransform(scrollYProgress, [0, 1], [0, 80]);
   const y3 = useTransform(scrollYProgress, [0, 1], [0, -200]);
 
+  const pick = (...idx: number[]) => idx.map((i) => gallery[i % Math.max(1, gallery.length)]).filter(Boolean);
   const cols = [
-    { y: y1, items: [gallery[1], gallery[6], gallery[3]] },
-    { y: y2, items: [gallery[2], gallery[10], gallery[9]] },
-    { y: y3, items: [gallery[5], gallery[4], gallery[7]] },
+    { y: y1, items: pick(1, 6, 3) },
+    { y: y2, items: pick(2, 10, 9) },
+    { y: y3, items: pick(5, 4, 7) },
   ];
 
   return (

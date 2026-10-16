@@ -5,21 +5,22 @@ import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 import { useLenis } from "lenis/react";
-import { SITE } from "@/lib/utils";
-import { photos, eventTypes } from "@/lib/data";
+import type { SiteInfo } from "@/lib/content";
+import type { EventType } from "@/lib/data";
 
-const primary = [
-  { href: "/", label: "Ana Sayfa", n: "01", image: photos.kissBW },
-  { href: "/#etkinlikler", label: "Etkinlikler", n: "02", image: photos.silhouette },
-  { href: "/#deneyim", label: "Deneyim", n: "03", image: photos.goldRings },
-  { href: "/galeri", label: "Galeri", n: "04", image: photos.kissBW },
-  { href: "/rezervasyon", label: "Rezervasyon", n: "05", image: photos.silhouette },
+const primaryBase = [
+  { href: "/", label: "Ana Sayfa", n: "01" },
+  { href: "/#etkinlikler", label: "Etkinlikler", n: "02" },
+  { href: "/#deneyim", label: "Deneyim", n: "03" },
+  { href: "/galeri", label: "Galeri", n: "04" },
+  { href: "/rezervasyon", label: "Rezervasyon", n: "05" },
 ];
 
 const ease = [0.76, 0, 0.24, 1] as const;
 
-export function Menu({ onClose }: { onClose: () => void }) {
+export function Menu({ onClose, site, eventTypes, images }: { onClose: () => void; site: SiteInfo; eventTypes: EventType[]; images: string[] }) {
   const lenis = useLenis();
+  const primary = primaryBase.map((l, i) => ({ ...l, image: images[i] ?? images[0] }));
   const [hover, setHover] = useState<number | null>(null);
 
   useEffect(() => {
@@ -117,13 +118,13 @@ export function Menu({ onClose }: { onClose: () => void }) {
           </div>
           <div>
             <p className="eyebrow mb-4">İletişim</p>
-            <a href={SITE.phoneHref} className="block font-display text-2xl text-ivory/80 hover:text-ivory">
-              {SITE.phone}
+            <a href={site.phoneHref} className="block font-display text-2xl text-ivory/80 hover:text-ivory">
+              {site.phone}
             </a>
-            <a href={SITE.whatsapp} target="_blank" rel="noreferrer" className="block font-display text-2xl text-ivory/80 hover:text-ivory">
+            <a href={site.whatsapp} target="_blank" rel="noreferrer" className="block font-display text-2xl text-ivory/80 hover:text-ivory">
               WhatsApp ile yazın
             </a>
-            <p className="mt-3 max-w-xs text-sm text-mute">{SITE.addressFull}</p>
+            <p className="mt-3 max-w-xs text-sm text-mute">{site.addressFull}</p>
           </div>
         </motion.aside>
 
@@ -134,8 +135,8 @@ export function Menu({ onClose }: { onClose: () => void }) {
           transition={{ delay: 0.9 }}
           className="relative z-10 flex items-center justify-between border-t hairline pt-6 font-sans text-[11px] uppercase tracking-[0.25em] text-mute lg:col-span-2"
         >
-          <span>Trabzon · Meydan</span>
-          <a href={SITE.mapsHref} target="_blank" rel="noreferrer" className="hover:text-ivory">
+          <span>{site.city} · {site.district}</span>
+          <a href={site.mapsHref} target="_blank" rel="noreferrer" className="hover:text-ivory">
             Haritada aç ↗
           </a>
         </motion.div>

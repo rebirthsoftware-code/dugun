@@ -1,19 +1,19 @@
 import Link from "next/link";
-import { SITE } from "@/lib/utils";
-import { eventTypes } from "@/lib/data";
+import type { SiteInfo } from "@/lib/content";
+import type { EventType } from "@/lib/data";
 import { IstanbulClock } from "./Clock";
 import { Logo } from "./Logo";
 import { Year } from "./Year";
 
-export function Footer() {
+export function Footer({ site, eventTypes }: { site: SiteInfo; eventTypes: EventType[] }) {
   return (
     <footer className="surface-ink relative overflow-hidden">
       <div className="container-x grid gap-14 py-20 lg:grid-cols-[1.2fr_1fr_1fr_1fr]">
         <div className="flex flex-col gap-6">
           <Logo />
-          <p className="max-w-xs text-sm leading-relaxed text-mute">{SITE.tagline}</p>
+          <p className="max-w-xs text-sm leading-relaxed text-mute">{site.tagline}</p>
           <p className="font-sans text-[11px] uppercase tracking-[0.25em] text-mute">
-            Trabzon · <IstanbulClock />
+            {site.city} · <IstanbulClock />
           </p>
         </div>
 
@@ -52,33 +52,47 @@ export function Footer() {
 
         <FooterCol title="İletişim">
           <li>
-            <a href={SITE.phoneHref} className="hover:text-gold">
-              {SITE.phone}
+            <a href={site.phoneHref} className="hover:text-gold">
+              {site.phone}
             </a>
           </li>
           <li>
-            <a href={SITE.whatsapp} target="_blank" rel="noreferrer" className="hover:text-gold">
+            <a href={site.whatsapp} target="_blank" rel="noreferrer" className="hover:text-gold">
               WhatsApp ↗
             </a>
           </li>
+          {site.email && (
+            <li>
+              <a href={`mailto:${site.email}`} className="hover:text-gold">
+                {site.email}
+              </a>
+            </li>
+          )}
+          {site.instagram && (
+            <li>
+              <a href={site.instagram} target="_blank" rel="noreferrer" className="hover:text-gold">
+                Instagram ↗
+              </a>
+            </li>
+          )}
           <li>
-            <a href={SITE.mapsHref} target="_blank" rel="noreferrer" className="hover:text-gold">
-              {SITE.addressFull}
+            <a href={site.mapsHref} target="_blank" rel="noreferrer" className="hover:text-gold">
+              {site.addressFull}
             </a>
           </li>
         </FooterCol>
       </div>
 
       <div className="container-x flex flex-col gap-4 border-t hairline py-6 font-sans text-[11px] uppercase tracking-[0.22em] text-mute sm:flex-row sm:items-center sm:justify-between">
-        <span>© <Year /> {SITE.fullName}</span>
-        <span>Meydan, Trabzon</span>
+        <span>© <Year /> {site.fullName}</span>
+        <span>{site.district}, {site.city}</span>
       </div>
 
       <div
         aria-hidden
         className="pointer-events-none select-none px-[2vw] pb-[1vw] font-display text-[clamp(4rem,19.5vw,22rem)] leading-[0.78] tracking-[0.02em] text-outline"
       >
-        KONAK
+        {site.name.toLocaleUpperCase("tr")}
       </div>
     </footer>
   );

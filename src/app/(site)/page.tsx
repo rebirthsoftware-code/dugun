@@ -8,36 +8,32 @@ import { Testimonials } from "@/components/sections/Testimonials";
 import { Availability } from "@/components/sections/Availability";
 import { FAQ } from "@/components/sections/FAQ";
 import { CTA } from "@/components/sections/CTA";
-import { faqs, eventTypes } from "@/lib/data";
+import { getContent } from "@/lib/content";
 import { SITE } from "@/lib/utils";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const c = await getContent();
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "EventVenue",
-        name: SITE.fullName,
-        description: SITE.description,
-        url: SITE.url,
-        telephone: SITE.phone,
+        name: c.site.fullName,
+        description: c.site.description,
+        telephone: c.site.phone,
         address: {
           "@type": "PostalAddress",
-          streetAddress: SITE.address,
-          addressLocality: SITE.district,
-          addressRegion: SITE.city,
+          streetAddress: c.site.address,
+          addressLocality: c.site.district,
+          addressRegion: c.site.city,
           addressCountry: "TR",
         },
         geo: { "@type": "GeoCoordinates", latitude: SITE.geo.lat, longitude: SITE.geo.lng },
-        maximumAttendeeCapacity: Math.max(...eventTypes.map((v) => v.capacity)),
+        maximumAttendeeCapacity: Math.max(0, ...c.eventTypes.map((v) => v.capacity)),
       },
       {
         "@type": "FAQPage",
-        mainEntity: faqs.map((f) => ({
-          "@type": "Question",
-          name: f.q,
-          acceptedAnswer: { "@type": "Answer", text: f.a },
-        })),
+        mainEntity: c.faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
       },
     ],
   };
@@ -45,16 +41,16 @@ export default function HomePage() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <Hero />
-      <Intro />
-      <EventTypes />
-      <Flow />
-      <Services />
-      <GalleryPreview />
-      <Testimonials />
-      <Availability />
-      <FAQ />
-      <CTA />
+      <Hero hero={c.hero} site={c.site} capacity={Math.max(0, ...c.eventTypes.map((v) => v.capacity))} />
+      <Intro intro={c.intro} stats={c.stats} />
+      <EventTypes eventTypes={c.eventTypes} />
+      <Flow timeline={c.timeline} />
+      <Services services={c.services} />
+      <GalleryPreview gallery={c.gallery} />
+      <Testimonials testimonials={c.testimonials} />
+      <Availability eventTypes={c.eventTypes} />
+      <FAQ faqs={c.faqs} />
+      <CTA cta={c.cta} site={c.site} />
     </>
   );
 }

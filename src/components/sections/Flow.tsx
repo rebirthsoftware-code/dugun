@@ -4,11 +4,11 @@ import Image from "next/image";
 import { useRef, useState } from "react";
 import { motion } from "motion/react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { timeline } from "@/lib/data";
+import type { TimelineItem } from "@/lib/content";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
 /** Günün akışı: yatay, snap'li şerit. Masaüstünde ok tuşları, mobilde parmakla kaydırma. */
-export function Flow() {
+export function Flow({ timeline }: { timeline: TimelineItem[] }) {
   const strip = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(0);
 

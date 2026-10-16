@@ -4,30 +4,28 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ViewTransition } from "react";
 import { ArrowLeft, ArrowUpRight, Check } from "lucide-react";
-import { getEventType, eventTypes } from "@/lib/data";
-import { SITE } from "@/lib/utils";
+import { getContent } from "@/lib/content";
 import { ButtonLink } from "@/components/ui/Button";
 import { FadeIn, SplitWords, ClipReveal } from "@/components/ui/Reveal";
 import { Availability } from "@/components/sections/Availability";
 
-export async function generateStaticParams() {
-  return eventTypes.map((v) => ({ slug: v.slug }));
-}
-
 export async function generateMetadata({ params }: PageProps<"/etkinlikler/[slug]">): Promise<Metadata> {
   const { slug } = await params;
-  const v = getEventType(slug);
+  const c = await getContent();
+  const v = c.eventTypes.find((e) => e.slug === slug);
   if (!v) return {};
   return {
     title: v.name,
     description: `${v.name} · ${v.subtitle}. ${v.description}`,
-    openGraph: { title: `${v.name} · ${SITE.name}`, description: v.description },
+    openGraph: { title: `${v.name} · ${c.site.name}`, description: v.description },
   };
 }
 
 export default async function VenuePage({ params }: PageProps<"/etkinlikler/[slug]">) {
   const { slug } = await params;
-  const v = getEventType(slug);
+  const c = await getContent();
+  const eventTypes = c.eventTypes;
+  const v = eventTypes.find((e) => e.slug === slug);
   if (!v) notFound();
 
   const idx = eventTypes.findIndex((x) => x.slug === v.slug);
@@ -134,7 +132,7 @@ export default async function VenuePage({ params }: PageProps<"/etkinlikler/[slu
           </span>
           <h2 className="mt-5 font-display type-md text-ink">{v.name} için tarihinizi seçin.</h2>
         </div>
-        <Availability compact />
+        <Availability compact eventTypes={eventTypes} />
         <div className="pb-10" />
       </section>
 

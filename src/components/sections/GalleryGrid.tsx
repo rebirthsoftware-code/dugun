@@ -5,18 +5,16 @@ import Image from "next/image";
 import { AnimatePresence, motion } from "motion/react";
 import { X, ArrowLeft, ArrowRight } from "lucide-react";
 import { useLenis } from "lenis/react";
-import { gallery } from "@/lib/data";
+import type { GalleryItem } from "@/lib/content";
 
 /** Tam galeri: masonry düzen + klavye destekli lightbox. */
-export function GalleryGrid() {
+export function GalleryGrid({ gallery }: { gallery: GalleryItem[] }) {
   const [active, setActive] = useState<number | null>(null);
   const lenis = useLenis();
 
   const close = useCallback(() => setActive(null), []);
-  const step = useCallback(
-    (d: number) => setActive((a) => (a === null ? a : (a + d + gallery.length) % gallery.length)),
-    [],
-  );
+  const n = gallery.length;
+  const step = useCallback((d: number) => setActive((a) => (a === null ? a : (a + d + n) % n)), [n]);
 
   useEffect(() => {
     if (active === null) {

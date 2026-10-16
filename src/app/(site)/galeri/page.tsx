@@ -2,13 +2,15 @@ import type { Metadata } from "next";
 import { GalleryGrid } from "@/components/sections/GalleryGrid";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { CTA } from "@/components/sections/CTA";
+import { getContent } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Galeri",
   description: "Konak'ta yaşanmış düğün, nişan ve kına gecelerinden kareler.",
 };
 
-export default function GalleryPage() {
+export default async function GalleryPage() {
+  const c = await getContent();
   return (
     <>
       <section className="container-x pb-16 pt-[calc(var(--header-h)+4rem)] md:pt-[calc(var(--header-h)+7rem)]">
@@ -18,9 +20,9 @@ export default function GalleryPage() {
             Her kare gerçek bir Konak gecesinden. Büyütmek için tıklayın; ok tuşlarıyla gezin.
           </p>
         </div>
-        <GalleryGrid />
+        <GalleryGrid gallery={c.gallery} />
       </section>
-      <CTA />
+      <CTA cta={c.cta} site={c.site} />
     </>
   );
 }

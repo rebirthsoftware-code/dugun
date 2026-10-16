@@ -3,11 +3,11 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Plus } from "lucide-react";
-import { faqs } from "@/lib/data";
+import type { Faq } from "@/lib/content";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { cn } from "@/lib/utils";
 
-export function FAQ() {
+export function FAQ({ faqs }: { faqs: Faq[] }) {
   const [open, setOpen] = useState<number | null>(0);
   return (
     <section id="sss" className="surface-white container-x scroll-mt-20 py-24 md:py-36" aria-label="Sık sorulan sorular">

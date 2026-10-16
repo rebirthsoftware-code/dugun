@@ -3,7 +3,7 @@
 import { useActionState, useEffect, useRef, useState, useTransition } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { ArrowLeft, ArrowRight, Check, Loader2 } from "lucide-react";
-import { eventTypes } from "@/lib/data";
+import type { EventType } from "@/lib/data";
 import { getMonthAvailability, submitInquiry, type InquiryState } from "@/lib/actions";
 import type { DayAvailability } from "@/lib/availability";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -26,7 +26,7 @@ function fmtDate(iso: string) {
   return `${d} ${MONTHS[m - 1]} ${y}, ${["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"][dt.getDay()]}`;
 }
 
-export function Availability({ compact = false }: { compact?: boolean }) {
+export function Availability({ compact = false, eventTypes }: { compact?: boolean; eventTypes: EventType[] }) {
   const [venue, setVenue] = useState(eventTypes[0].slug);
   const [cursor, setCursor] = useState<{ y: number; m: number } | null>(null);
   const [days, setDays] = useState<DayAvailability[]>([]);

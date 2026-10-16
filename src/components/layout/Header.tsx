@@ -7,6 +7,8 @@ import { Logo } from "./Logo";
 import { Menu } from "./Menu";
 import { Magnetic } from "@/components/ui/Magnetic";
 import { cn } from "@/lib/utils";
+import type { SiteInfo } from "@/lib/content";
+import type { EventType } from "@/lib/data";
 
 export const navLinks = [
   { href: "/#etkinlikler", label: "Etkinlikler" },
@@ -15,7 +17,7 @@ export const navLinks = [
   { href: "/#tarih", label: "Tarih Sorgula" },
 ] as const;
 
-export function Header() {
+export function Header({ site, eventTypes, menuImages }: { site: SiteInfo; eventTypes: EventType[]; menuImages: string[] }) {
   const [hidden, setHidden] = useState(false);
   const [solid, setSolid] = useState(false);
   const [open, setOpen] = useState(false);
@@ -98,7 +100,7 @@ export function Header() {
           </div>
         </div>
       </motion.header>
-      <AnimatePresence>{open && <Menu onClose={() => setOpen(false)} />}</AnimatePresence>
+      <AnimatePresence>{open && <Menu onClose={() => setOpen(false)} site={site} eventTypes={eventTypes} images={menuImages} />}</AnimatePresence>
     </>
   );
 }
