@@ -54,6 +54,7 @@ export async function submitInquiry(_prev: InquiryState, formData: FormData): Pr
     date: data.date,
     guests: data.guests,
     message: data.message || undefined,
+    source: data.source || undefined,
   });
 
   revalidatePath("/panel");

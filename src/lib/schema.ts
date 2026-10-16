@@ -17,6 +17,7 @@ export const inquirySchema = z.object({
     .refine((v) => !Number.isNaN(Date.parse(v)), "Geçersiz tarih."),
   guests: z.coerce.number().int().min(20, "En az 20 kişi.").max(600, "En fazla 600 kişi."),
   message: z.string().trim().max(600, "Mesaj 600 karakteri aşamaz.").optional().or(z.literal("")),
+  source: z.string().trim().max(200).optional().or(z.literal("")),
   // Honeypot: insanlar doldurmaz.
   website: z.string().max(0).optional().or(z.literal("")),
 });

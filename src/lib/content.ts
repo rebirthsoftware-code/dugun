@@ -30,6 +30,7 @@ export type SiteInfo = {
   coords: string;
   instagram: string;
   email: string;
+  metaPixelId: string;
 };
 
 export type HeroContent = {
@@ -89,6 +90,7 @@ export const defaultContent: SiteContent = {
     coords: DEFAULT_SITE.coords,
     instagram: "",
     email: "",
+    metaPixelId: "",
   },
   hero: {
     eyebrow: "Düğün Salonu · Meydan, Trabzon",

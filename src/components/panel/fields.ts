@@ -33,6 +33,7 @@ export const sections: SectionDef[] = [
       { key: "city", label: "Şehir", type: "text", width: "half" },
       { key: "district", label: "İlçe / semt", type: "text", width: "half" },
       { key: "coords", label: "Koordinat etiketi", type: "text", hint: "41°00′N 39°43′E" },
+      { key: "metaPixelId", label: "Meta Pixel ID (reklam ölçümü)", type: "text", hint: "Events Manager → Veri kaynakları → Pixel kimliği" },
     ],
   },
   {

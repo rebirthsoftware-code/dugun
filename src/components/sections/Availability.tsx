@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useEffect, useRef, useState, useTransition } from "react";
+import { SOURCE_KEY, track } from "@/components/layout/MetaPixel";
 import { AnimatePresence, motion } from "motion/react";
 import { ArrowLeft, ArrowRight, Check, Loader2 } from "lucide-react";
 import type { EventType } from "@/lib/data";
@@ -249,6 +250,21 @@ const inputCls =
 function InquiryForm({ venue, date }: { venue: string; date: string }) {
   const [state, action, pending] = useActionState(submitInquiry, initial);
   const errors = state.status === "error" ? state.fieldErrors : {};
+  const [source, setSource] = useState("");
+
+  useEffect(() => {
+    try {
+      const raf = requestAnimationFrame(() => setSource(sessionStorage.getItem(SOURCE_KEY) ?? ""));
+      return () => cancelAnimationFrame(raf);
+    } catch {
+      /* yok say */
+    }
+  }, []);
+
+  // Reklam ölçümü: başarılı talep = Lead
+  useEffect(() => {
+    if (state.status === "success") track("Lead", { content_name: venue, value: 1, currency: "TRY" });
+  }, [state.status, venue]);
 
   if (state.status === "success") {
     return (
@@ -277,6 +293,7 @@ function InquiryForm({ venue, date }: { venue: string; date: string }) {
     <form action={action} className="flex flex-col gap-6" noValidate>
       <input type="hidden" name="venue" value={venue} />
       <input type="hidden" name="date" value={date} />
+      <input type="hidden" name="source" value={source} />
       {/* Honeypot */}
       <input type="text" name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden />
 

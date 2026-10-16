@@ -69,6 +69,7 @@ export function ReservationRow({ r, typeName, expanded = false }: { r: Reservati
             </option>
           ))}
         </select>
+        {r.source && <span className="hidden rounded-full bg-gold/20 px-2 py-0.5 text-[10px] uppercase tracking-[0.15em] text-gold-2 lg:block">{r.source.split(" ")[0]}</span>}
         <span className="hidden text-xs text-tone-mute xl:block">{fmtTs(r.createdAt)}</span>
         {pending && <Loader2 className="size-4 animate-spin text-tone-mute" />}
       </div>
@@ -79,6 +80,7 @@ export function ReservationRow({ r, typeName, expanded = false }: { r: Reservati
             <div className="mb-1 font-sans text-[10px] uppercase tracking-[0.2em] text-tone-mute">Çiftin notu</div>
             <p className="text-sm">{r.message || <span className="text-tone-mute">—</span>}</p>
             <div className="mt-3 font-sans text-[10px] uppercase tracking-[0.2em] text-tone-mute">Referans · {r.id}</div>
+            {r.source && <div className="mt-1 font-sans text-[10px] uppercase tracking-[0.2em] text-gold-2">Kaynak · {r.source}</div>}
           </div>
           <div>
             <div className="mb-1 font-sans text-[10px] uppercase tracking-[0.2em] text-tone-mute">Sizin notunuz</div>

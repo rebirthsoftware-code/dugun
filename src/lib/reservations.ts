@@ -14,6 +14,8 @@ export type Reservation = {
   message?: string;
   status: ReservationStatus;
   note?: string;
+  /** Trafik kaynağı: utm parametreleri / fbclid / yönlendiren (reklam ölçümü) */
+  source?: string;
 };
 
 const KEY = "konak:reservations";
