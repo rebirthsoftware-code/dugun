@@ -16,13 +16,13 @@
     "instagram": "https://www.instagram.com/konakdugunsalonutrabzon?vrfl=MWhvcW52bXFoY3d2cw==",
     "email": ""
   },
-  "updatedAt": "2026-10-16T15:04:00.607Z",
+  "updatedAt": "2026-10-16T15:39:12.527Z",
   "gallery": [
     {
-      "src": "/fotograf/IMG_0161.PNG",
+      "src": "https://github.com/rebirthsoftware-code/dugun/blob/ccr-d40f331d-98zet0/IMG_0161.PNG",
       "alt": "Duvak altında ilk öpücük",
-      "w": 7,
-      "h": 4
+      "w": 4,
+      "h": 5
     },
     {
       "src": "https://images.unsplash.com/photo-1537907690979-ee8e01276184?w=1600&q=80&auto=format&fit=crop",
@@ -87,6 +87,12 @@
     {
       "src": "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=1600&q=80&auto=format&fit=crop",
       "alt": "Konfeti altında çıkış",
+      "w": 4,
+      "h": 3
+    },
+    {
+      "src": "https://github.com/rebirthsoftware-code/dugun/blob/ccr-d40f331d-98zet0/public/fotograf/WhatsApp%20Image%202026-10-14%20at%2017.08.50.jpeg",
+      "alt": "",
       "w": 4,
       "h": 3
     }
