@@ -16,7 +16,7 @@
     "instagram": "https://www.instagram.com/konakdugunsalonutrabzon?vrfl=MWhvcW52bXFoY3d2cw==",
     "email": ""
   },
-  "updatedAt": "2026-10-16T17:00:10.080Z",
+  "updatedAt": "2026-10-16T17:00:53.244Z",
   "gallery": [
     {
       "src": "https://raw.githubusercontent.com/rebirthsoftware-code/dugun/refs/heads/ccr-d40f331d-98zet0/public/fotograf/IMG_0161.PNG",
@@ -133,6 +133,36 @@
       "title": "Uğurlama",
       "text": "Maytaplı çıkış ve konuk uğurlama.",
       "image": "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=1600&q=80&auto=format&fit=crop"
+    }
+  ],
+  "services": [
+    {
+      "id": "dekor",
+      "eyebrow": "Tasarım",
+      "title": "Dekor & Masalar",
+      "text": "Masa düzeni, nişan masası, kına tahtı ve çiçek tasarımı; her etkinlik için size özel kurulur.",
+      "image": "https://raw.githubusercontent.com/rebirthsoftware-code/dugun/refs/heads/ccr-d40f331d-98zet0/public/fotograf/IMG_0179.JPG.jpeg"
+    },
+    {
+      "id": "muzik",
+      "eyebrow": "Sahne",
+      "title": "Müzik & Işık",
+      "text": "Kemençeden DJ'e, LED ışık mimarisinden maytap gösterisine. Gecenin ritmini profesyonel ekibimiz kurar.",
+      "image": "https://images.unsplash.com/photo-1513725673171-537abba17912?w=1600&q=80&auto=format&fit=crop"
+    },
+    {
+      "id": "planlama",
+      "eyebrow": "Koordinasyon",
+      "title": "Planlama",
+      "text": "İlk görüşmeden son dansa kadar tek bir isim: size özel koordinatörünüz. Zaman çizelgesi, tedarikçi ve prova.",
+      "image": "https://images.unsplash.com/photo-1519657337289-077653f724ed?w=1600&q=80&auto=format&fit=crop"
+    },
+    {
+      "id": "ulasim",
+      "eyebrow": "Konum",
+      "title": "Ulaşım",
+      "text": "Gazipaşa Mah. Cudibey Mektep Sok. No: 3/A, Meydan / Trabzon. Şehir merkezinde, toplu taşımaya ve ana caddelere yürüme mesafesinde.",
+      "image": "https://images.unsplash.com/photo-1515169067868-5387ec356754?w=1600&q=80&auto=format&fit=crop"
     }
   ]
 }
