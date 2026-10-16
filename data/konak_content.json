@@ -16,7 +16,7 @@
     "instagram": "https://www.instagram.com/konakdugunsalonutrabzon?vrfl=MWhvcW52bXFoY3d2cw==",
     "email": ""
   },
-  "updatedAt": "2026-10-16T16:29:36.648Z",
+  "updatedAt": "2026-10-16T16:54:37.044Z",
   "gallery": [
     {
       "src": "https://raw.githubusercontent.com/rebirthsoftware-code/dugun/refs/heads/ccr-d40f331d-98zet0/public/fotograf/IMG_0161.PNG",
@@ -95,6 +95,44 @@
       "alt": "Nikah masası",
       "w": 4,
       "h": 3
+    }
+  ],
+  "timeline": [
+    {
+      "time": "15:00",
+      "title": "Hazırlık",
+      "text": "Gelin odasında kuaför, makyaj ve fotoğraf çekimi.",
+      "image": "https://images.unsplash.com/photo-1550005809-91ad75fb315f?w=1600&q=80&auto=format&fit=crop"
+    },
+    {
+      "time": "18:30",
+      "title": "Karşılama",
+      "text": "Konuk karşılama ve fotoğraf köşesi.",
+      "image": "https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=1600&q=80&auto=format&fit=crop"
+    },
+    {
+      "time": "19:30",
+      "title": "Giriş",
+      "text": "Çiftin salona girişi, ilk dans ve ışık gösterisi.",
+      "image": "https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=1600&q=80&auto=format&fit=crop"
+    },
+    {
+      "time": "20:30",
+      "title": "Takı Töreni",
+      "text": "Takı merasimi ve aile fotoğrafları.",
+      "image": "https://raw.githubusercontent.com/rebirthsoftware-code/dugun/refs/heads/ccr-d40f331d-98zet0/public/fotograf/IMG_0195.JPG.jpeg"
+    },
+    {
+      "time": "22:00",
+      "title": "Horon",
+      "text": "Kemençe, davul ve DJ. Pist dolar, ışıklar geceye döner.",
+      "image": "https://raw.githubusercontent.com/rebirthsoftware-code/dugun/refs/heads/ccr-d40f331d-98zet0/public/fotograf/IMG_0194.JPG.jpeg"
+    },
+    {
+      "time": "00:30",
+      "title": "Uğurlama",
+      "text": "Maytaplı çıkış ve konuk uğurlama.",
+      "image": "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=1600&q=80&auto=format&fit=crop"
     }
   ]
 }
