@@ -4,6 +4,9 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { FAQ } from "@/components/sections/FAQ";
 import { getContent } from "@/lib/content";
 
+// GitHub yazımları ve yeniden denemeler için sunucu fonksiyonu süresi
+export const maxDuration = 60;
+
 export const metadata: Metadata = {
   title: "Rezervasyon & Tarih Sorgula",
   description: "Konak Düğün Salonu için anlık tarih uygunluğunu görün ve rezervasyon talebi bırakın.",

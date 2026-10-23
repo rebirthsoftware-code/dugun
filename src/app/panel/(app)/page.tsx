@@ -5,6 +5,9 @@ import { eventTypes } from "@/lib/data";
 import { dbBackend } from "@/lib/db";
 import { ReservationRow } from "@/components/panel/ReservationRow";
 
+// GitHub yazımları ve yeniden denemeler için sunucu fonksiyonu süresi
+export const maxDuration = 60;
+
 function fmt(iso: string) {
   const [y, m, d] = iso.split("-").map(Number);
   return new Date(y, m - 1, d).toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" });

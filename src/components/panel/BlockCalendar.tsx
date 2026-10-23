@@ -1,6 +1,6 @@
 "use client";
 
-import { useOptimistic, useTransition } from "react";
+import { useOptimistic, useRef, useState, useTransition } from "react";
 import { Loader2 } from "lucide-react";
 import { toggleBlocked } from "@/lib/panel-actions";
 import { cn } from "@/lib/utils";
@@ -10,6 +10,9 @@ type Tag = { date: string; label: string };
 
 export function BlockCalendar({ year, month, blocked, confirmed, pending }: { year: number; month: number; blocked: string[]; confirmed: Tag[]; pending: Tag[] }) {
   const [isPending, start] = useTransition();
+  const [error, setError] = useState<string | null>(null);
+  // Hızlı tıklamalar sıraya alınır: aynı anda birden fazla yazma GitHub'da çakışma üretmesin.
+  const queue = useRef<Promise<unknown>>(Promise.resolve());
   const [optimistic, setOptimistic] = useOptimistic(new Set(blocked), (set, date: string) => {
     const n = new Set(set);
     if (n.has(date)) n.delete(date);
@@ -45,7 +48,16 @@ export function BlockCalendar({ year, month, blocked, confirmed, pending }: { ye
             <button
               key={iso}
               type="button"
-              onClick={() => start(() => { setOptimistic(iso); return toggleBlocked(iso); })}
+              onClick={() =>
+                start(async () => {
+                  setOptimistic(iso);
+                  setError(null);
+                  const run = queue.current.then(() => toggleBlocked(iso));
+                  queue.current = run.catch(() => undefined);
+                  const res = await run;
+                  if (!res.ok) setError(res.message ?? "Kaydedilemedi.");
+                })
+              }
               title={isBlocked ? "Kapatıldı · tıklayınca açılır" : "Açık · tıklayınca kapatılır"}
               className={cn(
                 "flex min-h-[5.5rem] flex-col rounded-lg border p-2 text-left transition",
@@ -75,6 +87,11 @@ export function BlockCalendar({ year, month, blocked, confirmed, pending }: { ye
           );
         })}
       </div>
+      {error && (
+        <p role="alert" className="mt-4 rounded-md border border-rose/40 bg-rose/10 px-3 py-2 text-sm text-ink">
+          {error} Sayfayı yenileyip tekrar deneyin.
+        </p>
+      )}
       <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-2 font-sans text-[10px] uppercase tracking-[0.2em] text-tone-mute">
         <span className="flex items-center gap-2"><span className="size-3 rounded-sm border border-gold-2 bg-gold/15" /> Onaylı randevu</span>
         <span className="flex items-center gap-2"><span className="size-3 rounded-sm bg-ink" /> Kapatıldı</span>

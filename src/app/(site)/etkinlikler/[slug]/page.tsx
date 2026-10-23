@@ -9,6 +9,9 @@ import { ButtonLink } from "@/components/ui/Button";
 import { FadeIn, SplitWords, ClipReveal } from "@/components/ui/Reveal";
 import { Availability } from "@/components/sections/Availability";
 
+// GitHub yazımları ve yeniden denemeler için sunucu fonksiyonu süresi
+export const maxDuration = 60;
+
 export async function generateMetadata({ params }: PageProps<"/etkinlikler/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const c = await getContent();

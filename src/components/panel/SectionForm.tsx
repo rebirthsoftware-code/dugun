@@ -103,7 +103,7 @@ export function SectionForm({ def, initial }: { def: SectionDef; initial: unknow
         <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={() => confirm("Bu bölüm varsayılan içeriğe döndürülsün mü?") && resetSectionAction(def.key)}
+            onClick={() => confirm("Bu bölüm varsayılan içeriğe döndürülsün mü?") && resetSectionAction(def.key).then((r) => !r.ok && alert(r.message))}
             className="flex items-center gap-2 rounded-md border border-ink/15 px-3 py-2 text-xs text-tone-mute hover:text-ink"
             title="Varsayılana dön"
           >

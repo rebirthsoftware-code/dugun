@@ -69,10 +69,16 @@ async function ghRead(key: string, force = false): Promise<GhEntry> {
   }
 }
 
-/** `data` dalı yoksa varsayılan daldan oluşturur. */
+let branchEnsured = false;
+
+/** `data` dalı yoksa varsayılan daldan oluşturur (süreç başına bir kez kontrol edilir). */
 async function ghEnsureBranch() {
+  if (branchEnsured) return;
   const ref = await fetch(`${ghApi}/repos/${ghRepo}/git/ref/heads/${encodeURIComponent(ghBranch)}`, { headers: ghHeaders(), cache: "no-store" });
-  if (ref.ok) return;
+  if (ref.ok) {
+    branchEnsured = true;
+    return;
+  }
   const repo = await fetch(`${ghApi}/repos/${ghRepo}`, { headers: ghHeaders(), cache: "no-store" });
   if (!repo.ok) throw new Error(`GitHub depo bilgisi alınamadı ${repo.status}`);
   const { default_branch } = (await repo.json()) as { default_branch: string };
@@ -85,6 +91,14 @@ async function ghEnsureBranch() {
     body: JSON.stringify({ ref: `refs/heads/${ghBranch}`, sha: object.sha }),
   });
   if (!create.ok && create.status !== 422) throw new Error(`Dal oluşturulamadı ${create.status}: ${await create.text()}`);
+  branchEnsured = true;
+}
+
+/** GitHub hız sınırı (403/429) yanıtında beklenecek süre; en fazla 4 sn. */
+function retryAfterMs(res: Response) {
+  const ra = Number(res.headers.get("retry-after"));
+  if (ra > 0) return Math.min(ra * 1000, 4000);
+  return 1500;
 }
 
 /**
@@ -121,7 +135,11 @@ async function ghWrite(key: string, updater: (current: unknown) => unknown) {
       await new Promise((r) => setTimeout(r, 150 * (attempt + 1)));
       continue; // sha çakışması: taze oku ve tekrar uygula
     }
-    throw new Error(`GitHub yazma hatası ${res.status}: ${await res.text()}`);
+    if ((res.status === 403 || res.status === 429) && attempt < 2) {
+      await new Promise((r) => setTimeout(r, retryAfterMs(res)));
+      continue; // hız sınırı: kısa bekle ve tekrar dene
+    }
+    throw new Error(`GitHub yazma hatası ${res.status}: ${(await res.text()).slice(0, 200)}`);
   }
   throw new Error("GitHub yazma: eşzamanlı değişiklik nedeniyle kaydedilemedi, tekrar deneyin.");
 }

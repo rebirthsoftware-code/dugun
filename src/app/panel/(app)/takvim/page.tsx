@@ -4,6 +4,9 @@ import { getOccupancy, statusLabels } from "@/lib/reservations";
 import { eventTypes } from "@/lib/data";
 import { BlockCalendar } from "@/components/panel/BlockCalendar";
 
+// GitHub yazımları ve yeniden denemeler için sunucu fonksiyonu süresi
+export const maxDuration = 60;
+
 const MONTHS = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
 
 export default async function CalendarPage({ searchParams }: PageProps<"/panel/takvim">) {

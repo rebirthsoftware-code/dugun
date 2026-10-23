@@ -4,6 +4,9 @@ import { sections } from "@/components/panel/fields";
 import { SectionForm } from "@/components/panel/SectionForm";
 import { cn } from "@/lib/utils";
 
+// GitHub yazımları ve yeniden denemeler için sunucu fonksiyonu süresi
+export const maxDuration = 60;
+
 export default async function ContentPage({ searchParams }: PageProps<"/panel/icerik">) {
   const sp = await searchParams;
   const content = await getContent();

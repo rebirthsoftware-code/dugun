@@ -4,6 +4,9 @@ import { eventTypes } from "@/lib/data";
 import { ReservationRow } from "@/components/panel/ReservationRow";
 import { cn } from "@/lib/utils";
 
+// GitHub yazımları ve yeniden denemeler için sunucu fonksiyonu süresi
+export const maxDuration = 60;
+
 const filters: { key: ReservationStatus | "all"; label: string }[] = [
   { key: "all", label: "Tümü" },
   { key: "new", label: statusLabels.new },

@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import { useIntroDone } from "@/components/layout/Providers";
 import { ButtonLink } from "@/components/ui/Button";
@@ -17,7 +17,22 @@ export function Hero({ hero, site, capacity }: { hero: HeroContent; site: SiteIn
   const WEBGL_SRC = HERO_SRC.includes("images.unsplash.com") ? `${HERO_SRC}${HERO_SRC.includes("?") ? "&" : "?"}w=1920` : HERO_SRC;
   const intro = useIntroDone();
   const [glReady, setGlReady] = useState(false);
-  const [canvasEnabled, setCanvasEnabled] = useState(true);
+  // WebGL efekti yalnızca yeterli belleğe sahip, fare kullanan masaüstü tarayıcılarda açılır.
+  // Tablet, telefon ve uygulama içi tarayıcılar (Instagram/Facebook) statik görseli görür.
+  const [canvasEnabled, setCanvasEnabled] = useState(false);
+  useEffect(() => {
+    const ua = navigator.userAgent;
+    const inApp = /FBAN|FBAV|Instagram|Line\/|wv\)/i.test(ua);
+    const finePointer = window.matchMedia("(pointer: fine)").matches;
+    const wide = window.innerWidth >= 1024;
+    const mem = (navigator as Navigator & { deviceMemory?: number }).deviceMemory;
+    const enoughMemory = mem === undefined || mem >= 4;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!inApp && finePointer && wide && enoughMemory && !reduced) {
+      const raf = requestAnimationFrame(() => setCanvasEnabled(true));
+      return () => cancelAnimationFrame(raf);
+    }
+  }, []);
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const panelY = useTransform(scrollYProgress, [0, 1], ["0%", "12%"]);

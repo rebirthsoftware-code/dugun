@@ -4,6 +4,9 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { CTA } from "@/components/sections/CTA";
 import { getContent } from "@/lib/content";
 
+// GitHub yazımları ve yeniden denemeler için sunucu fonksiyonu süresi
+export const maxDuration = 60;
+
 export const metadata: Metadata = {
   title: "Galeri",
   description: "Konak'ta yaşanmış düğün, nişan ve kına gecelerinden kareler.",

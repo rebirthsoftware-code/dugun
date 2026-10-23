@@ -28,7 +28,14 @@ function waLink(phone: string, name: string) {
 
 export function ReservationRow({ r, typeName, expanded = false }: { r: Reservation; typeName: string; expanded?: boolean }) {
   const [pending, start] = useTransition();
+  const [error, setError] = useState<string | null>(null);
   const [note, setNote] = useState(r.note ?? "");
+  const run = (p: Promise<{ ok: boolean; message?: string }>) =>
+    start(async () => {
+      setError(null);
+      const res = await p;
+      if (!res.ok) setError(res.message ?? "Kaydedilemedi.");
+    });
   const [open, setOpen] = useState(expanded);
 
   return (
@@ -59,7 +66,7 @@ export function ReservationRow({ r, typeName, expanded = false }: { r: Reservati
         </div>
         <select
           value={r.status}
-          onChange={(e) => start(() => setReservationStatus(r.id, e.target.value as ReservationStatus))}
+          onChange={(e) => run(setReservationStatus(r.id, e.target.value as ReservationStatus))}
           className={cn("rounded-full border px-3 py-1.5 text-xs font-medium outline-none", statusTone[r.status])}
           aria-label="Durum"
         >
@@ -73,6 +80,11 @@ export function ReservationRow({ r, typeName, expanded = false }: { r: Reservati
         <span className="hidden text-xs text-tone-mute xl:block">{fmtTs(r.createdAt)}</span>
         {pending && <Loader2 className="size-4 animate-spin text-tone-mute" />}
       </div>
+      {error && (
+        <p role="alert" className="mt-2 text-xs text-rose">
+          {error}
+        </p>
+      )}
 
       {open && (
         <div className="mt-4 grid gap-4 rounded-lg bg-paper p-4 md:grid-cols-[1fr_1fr_auto]">
@@ -87,7 +99,7 @@ export function ReservationRow({ r, typeName, expanded = false }: { r: Reservati
             <textarea
               value={note}
               onChange={(e) => setNote(e.target.value)}
-              onBlur={() => note !== (r.note ?? "") && start(() => saveReservationNote(r.id, note))}
+              onBlur={() => note !== (r.note ?? "") && run(saveReservationNote(r.id, note))}
               rows={3}
               placeholder="Kapora alındı, menü görüşülecek..."
               className="w-full rounded-md border border-ink/15 bg-white p-2 text-sm outline-none focus:border-gold-2"
@@ -96,7 +108,7 @@ export function ReservationRow({ r, typeName, expanded = false }: { r: Reservati
           <div className="flex items-start">
             <button
               type="button"
-              onClick={() => confirm("Bu talep silinsin mi?") && start(() => removeReservation(r.id))}
+              onClick={() => confirm("Bu talep silinsin mi?") && run(removeReservation(r.id))}
               className="flex items-center gap-2 rounded-md border border-rose/40 px-3 py-2 text-xs text-rose hover:bg-rose/10"
             >
               <Trash2 className="size-4" /> Sil

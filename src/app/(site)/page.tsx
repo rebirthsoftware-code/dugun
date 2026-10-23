@@ -11,6 +11,9 @@ import { CTA } from "@/components/sections/CTA";
 import { getContent } from "@/lib/content";
 import { SITE } from "@/lib/utils";
 
+// GitHub yazımları ve yeniden denemeler için sunucu fonksiyonu süresi
+export const maxDuration = 60;
+
 export default async function HomePage() {
   const c = await getContent();
   const jsonLd = {
