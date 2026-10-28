@@ -24,7 +24,7 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { site } = await getContent();
-  const base = process.env.NEXT_PUBLIC_SITE_URL ?? (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "https://dugun-livid.vercel.app");
+  const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.konakdugunsalonu.com";
   return {
     metadataBase: new URL(base),
     title: { default: `${site.fullName} · ${site.city}`, template: `%s · ${site.name}` },

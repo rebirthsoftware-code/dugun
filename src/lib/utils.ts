@@ -16,7 +16,7 @@ export const SITE = {
   tagline: "Hayatınızın en güzel günü, Konak'ta.",
   description:
     "Trabzon Meydan'da düğün, nişan, kına, matine ve toplantı organizasyonları için şık, ferah ve profesyonel bir salon.",
-  url: "https://rebirthsoftware-code.github.io/dugun",
+  url: "https://www.konakdugunsalonu.com",
   city: "Trabzon",
   district: "Meydan",
   phone: "0 (536) 726 57 53",

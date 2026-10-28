@@ -17,7 +17,7 @@ Next.js 16 · React 19 · TypeScript · Tailwind CSS 4 · Motion · Lenis · thr
 
 ## Canlı
 
-Vercel: **https://dugun-livid.vercel.app** · Yönetim paneli: **https://dugun-livid.vercel.app/panel**
+Canlı: **https://www.konakdugunsalonu.com** · Yönetim paneli: **https://www.konakdugunsalonu.com/panel** (Vercel)
 
 Her push'ta Vercel otomatik dağıtır.
 
